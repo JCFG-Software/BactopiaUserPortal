@@ -22,11 +22,19 @@ router.get('/', async function(req, res) {
     } = req.query;
 
     let results = null;
+    let metadata_results = null;
 
     // First -> do a db query for the metadata fields that are not null (host, location, source, time)
     if(isolation_host || isolation_location || isolation_source || time_of_sampling) {
-    results  = await req.knex.select("sample_id").distinctOn('sample_id')
-        .from('metadata')
+    metadata_results  = await req.knex.select(
+        "sample_id", 'isolation_host', 'isolation_location', 'isolation_source', 'time_of_sampling',
+    ).from(
+        req.knex.select("*").distinctOn('sample_id')
+            .from('metadata')
+            .orderBy('sample_id', 'asc')
+            .orderBy('created', 'desc')
+            .as('metadata')
+    )
         .modify(function (queryBuilder) {
             if (isolation_host) queryBuilder.where('isolation_host', 'ILIKE', '%' + isolation_host + '%');
             if (isolation_location) queryBuilder.where('isolation_location', 'ILIKE', '%' + isolation_location + '%');
@@ -35,10 +43,8 @@ router.get('/', async function(req, res) {
         })
         .orderBy('sample_id', 'asc')
         .orderBy('created', 'desc');
-    results = results.map((r) => r.sample_id);
     }
 
-    log(results);
 
 
     // NOTE: Maybe really slow but works for now
@@ -57,13 +63,54 @@ router.get('/', async function(req, res) {
         const sp_results = searchGenomes(species, "species");
         results = results ? results.filter(value => sp_results.includes(value)) : sp_results;
     }
-    let number = results?.length;
 
-    const samples = results.map((id) => {
-        return getGatherData(id);
+    // add gather data to all results, and metadata to the search results
+    const metadata_samples = metadata_results?.map((r) => {
+        return {
+            ...r,
+            ...getGatherData(r.sample_id)
+        }
     });
 
-    res.render('pages/advSearchResults', { samples, number: number, userLoggedIn: userLoggedIn });
+    const samples = results?.map((id) => {
+        const has_metadata = metadata_samples?.find((r) => r.sample_id === id);
+        if (has_metadata) {
+            return {
+                sample_id: id,
+                ...has_metadata,
+                ...getGatherData(id)
+            }
+        }
+        const metadata = req.knex.select(
+            "sample_id",
+            'isolation_host', 'isolation_location', 'isolation_source', 'time_of_sampling',
+        ).distinctOn('sample_id')
+            .from('metadata')
+            .where('sample_id', id)
+            .orderBy('sample_id', 'asc')
+            .orderBy('created', 'desc');
+        return {
+            sample_id: id,
+            ...metadata,
+            ...getGatherData(id)
+        }
+    });
+
+    const all_samples =
+        metadata_samples && samples ? metadata_samples.concat(samples) : metadata_samples ? metadata_samples : samples;
+
+    const number = all_samples?.length || 0;
+
+    if (number === 0) {
+        log("No results found for:");
+        log(req.query);
+        log("Metadata (db) results:");
+        log(metadata_results);
+        log("Search results:");
+        log(results);
+    }
+
+    res.render('pages/advSearchResults', { samples: all_samples ?? [], number: number, userLoggedIn: userLoggedIn });
 });
 
 module.exports = router

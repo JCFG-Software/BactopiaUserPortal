@@ -19,18 +19,6 @@ router.get('/', async function(req, res) {
 
     // if the search is a metadata search, just use db
     if (category === "isolation_host" || category === "isolation_location" || category === "isolation_source" || category === "time_of_sampling") {
-        // await req.knex.select("sample_id").distinctOn('sample_id')
-        //     .from('metadata')
-        //     .where(category, 'ILIKE', '%' + query + '%')
-        //     .orderBy('sample_id', 'asc')
-        //     .orderBy('created', 'desc')
-        //     .then((results) => {
-        //         result = results.map((r) => r.sample_id);
-        //     })
-        //     .catch((err) => {
-        //         log(err);
-        //     });
-        // the above, but only the where clauses on the distinct sample_ids
         await req.knex.select(
             "sample_id",
             'isolation_host', 'isolation_location', 'isolation_source', 'time_of_sampling',
@@ -64,7 +52,7 @@ router.get('/', async function(req, res) {
         // objects, add gather data
         result = result.map((r) => {
             return { 
-                result, 
+                ...r, 
             ...getGatherData(r.sample_id)
             }
         });
@@ -87,6 +75,7 @@ router.get('/', async function(req, res) {
             };
         });
     }
+        log(result);
 
 
     // Get some metadata about the samples that have been returned. Limit to 50
