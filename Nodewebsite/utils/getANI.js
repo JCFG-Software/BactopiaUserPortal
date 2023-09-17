@@ -24,6 +24,10 @@ async function getANI(sample_id){
     const tools_dir = path.join(SAMPLES_DIR, "bactopia-runs");
     // get all the fastani runs
     const fastani_runs = (await fs.readdir(tools_dir)).filter((file) => file.startsWith("fastani-"));
+    if(fastani_runs.length == 0){
+        log("Error: No fastani runs found");
+        return;
+    }
     // get the most recent one (suffix is YYYYMMDD-HHMMSS)
     const most_recent_run = fastani_runs.sort().reverse()[0];
     const fastani_dir = path.join(tools_dir, most_recent_run, "fastani");
@@ -39,17 +43,22 @@ async function getANI(sample_id){
     if(!fastani_data) return;
     // parse as tsv
     const fastani_lines = fastani_data.split("\n");
-    const ani_data = [];
+    const ani_data = {};
     const headers = fastani_lines[0].split("\t");
     for (let i = 1; i < fastani_lines.length; i++) {
         const line = fastani_lines[i];
         const line_data = line.split("\t");
         const line_obj = {};
         for (let j = 0; j < line_data.length; j++) {
-            const data = line_data[j];
+            const header = headers[j];
+            let data = line_data[j];
+            if(header == "query" || header == "reference"){
+                // remove file extension
+                data = line_data[j].split(".")[0];
+            }
             line_obj[headers[j]] = data;
         }
-        ani_data.push(line_obj);
+        ani_data[line_obj.query] = line_obj;
     }
     log(ani_data);
     return ani_data;

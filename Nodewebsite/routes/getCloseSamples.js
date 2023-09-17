@@ -5,6 +5,7 @@ const getMashDistances = require('../utils/getMashDistances')
 const getGatherData = require('../utils/getGatherData')
 const getMLST = require('../utils/getMLST')
 const getAllSampleNames = require('../utils/getAllSampleNames')
+const getANI = require('../utils/getANI')
 
 // Returns close samples and their metadata for use in the funcional network view
 router.get('/', async function(req, res) {
@@ -12,6 +13,10 @@ router.get('/', async function(req, res) {
     const allSamples = getAllSampleNames();
     // get the mash distances
     const distances = await getMashDistances(sampleId);
+    // get the ani distances
+    const ani = await getANI(sampleId);
+
+
     // get metadata where sampleId in others using knex
     const metadata = await req.knex.select(
         "sample_id",
@@ -36,13 +41,14 @@ router.get('/', async function(req, res) {
         const sampleSpecies = species.find((m) => m.sample_id === s);
         return {
             sample_id: s,
-            distance: distances[s],
+            mash_distance: distances[s],
+            ani: ani?.[s],
             sequence_type: sampleSequenceType?.sequence_type,
             species: sampleSpecies?.species,
             ...sampleMetadata,
         };
     });
-    // NOTE: With hundreds of samples, this may be slow. Consider filtering
+    // NOTE: With thousands of samples, this may be slow. Consider filtering
     // here before sending to client.
     res.json(closeSamples);
 })

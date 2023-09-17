@@ -6,7 +6,6 @@
     *  - Deal with filters
     *
 */
-
 // grab the sample name from the url param sampleSelection=sampleName
 const regex = /sampleSelection=([^&^#]+)/;
 const thisSample = regex.exec(window.location.href)[1]
@@ -23,6 +22,38 @@ const filters = {
     'species':true,
     'isolation_host':true,
     'isolation_source':true,
+}
+// wighting of ani in the mash vs ani distance calculation
+// 0 -> all mash
+// 1 -> all ani
+let weight = 0.5
+
+/**
+    * @description Converts a similarity to a distance
+    * @param {number} similarity - similarity between 0 and 100
+    * @returns {number} distance between 0 and 1
+    */
+function similarityToDistance(similarity){
+    // convert similarity to distance
+    // 0 -> 1
+    // 1 -> 0
+    return 1 - (similarity/100);
+}
+
+/**
+    * @description Converts a value between 0 and 1 to its corresponding
+    *               value between 0 and 1, exponentially. Makes it 
+    *               easier to select values closer to 0
+    * @param {number} x - value between 0 and 1
+    * @returns {number} value between 0 and 1
+    *               0 -> 0
+    *               1 -> 1
+    *               0.5 -> 0.25
+    *               0.25 -> 0.0625
+    *               0.75 -> 0.5625
+    */
+function exponential(x){
+    return Math.pow(x, 3);
 }
 
 function createNetwork() {
@@ -75,7 +106,7 @@ function populateNetwork() {
         if (other.sample_id == thisSample) return;
         // work out what is common (but not empty or null) between the two samples
         const common = Object.keys(thisData).filter((key) => {
-            return key !== 'distance' && thisData[key] === other?.[key] && thisData[key] !== null && thisData[key] !== '-' && thisData[key] !== 'null'
+            return key !== 'mash_distance' && thisData[key] === other?.[key] && thisData[key] !== null && thisData[key] !== '-' && thisData[key] !== 'null'
         });
         if (common.length === 0) {
             return;
@@ -92,7 +123,8 @@ function populateNetwork() {
                 content: 
                    `<div class="popup">
                         <h3 style="margin:0 auto">${other.sample_id}</h3>
-                        <p>Distance To Sample: ${other.distance}</p>
+                        <p>Mash Distance: ${other.mash_distance}</p>
+                        <p>ANI: ${other?.ani?.ani}</p>
                         <p>Isolation Host: ${other.isolation_host || 'Unknown'}</p>
                         <p>Isolation source: ${other.isolation_source || 'Unknown'}</p>
                         <p>Isolation location: ${other.isolation_location || 'Unknown'}</p>
@@ -138,8 +170,10 @@ function populateNetwork() {
 */
 function updateCytoscape() {
     const minConnections = document.getElementById('cyMinConnections').value;
-    const maxDistance = document.getElementById('cyMaxDistance').value;
+    const maxDistanceValue = document.getElementById('cyMaxDistance').value;
+    const maxDistance = exponential(maxDistanceValue);
     const includeNoDistance = document.getElementById('cyIncludeNoDistance').checked;
+    const ani_unavailable = [];
     cy.elements().forEach((el) => {
         if(el.isEdge()){
             // if relevant filter is disabled, hide the edge
@@ -152,6 +186,8 @@ function updateCytoscape() {
 
         }
         if (el.isNode()) {
+            const ani_available = el.data('ani')?.ani !== undefined;
+
             if(el.data('id') === thisSample) return;
             // filters -> 
             mask = el.data('common').filter((key) => filters[key]);
@@ -163,18 +199,39 @@ function updateCytoscape() {
             if (connections < minConnections) {
                 el.style('display', 'none');
                 return;
-            } else {
-                el.style('display', 'element');
             }
-            const distance = el.data('distance');
+            const mash_distance = el.data('mash_distance');
+            const ani_similarity = el.data('ani')?.ani;
+            let distance;
+            if(!ani_similarity){
+                // use mash
+                distance = mash_distance;
+                // notify that ani is not available
+            }else{
+                distance = (weight * similarityToDistance(ani_similarity)) + ((1-weight) * mash_distance);
+            }
             if (distance > maxDistance || distance === undefined && !includeNoDistance) {
                 el.style('display', 'none');
                 return;
             }
             el.style('display', 'element');
+            if(!ani_available){
+                ani_unavailable.push(el.data('id'));
+            }
         }
     }
     );
+    const error = document.getElementById('distanceError');
+    const errorContainer = document.getElementById('distanceErrorContainer');
+    if(ani_unavailable.length > 0){
+        errorContainer.style.display = 'flex';
+        error.innerText = `ANI unavailable for ${ani_unavailable.length} samples`; 
+        $("#distanceErrorInfo").tooltip({
+            title: ani_unavailable.join(', '),
+        });
+    }else{
+        errorContainer.style.display = 'none';
+    }
 }
 
 function changeConnection(filter, el){
@@ -240,13 +297,7 @@ function makeSlider(element, type) {
     element.onmousedown = dragMouseDown;
 
     // update text and values on first load
-    if (type === "min") {
-        element.style.left = 0;
-        document.getElementById("minGeneticDist").innerText = (0).toFixed(4);
-    } else {
-        element.style.left = width;
-        document.getElementById("maxGeneticDist").innerText = (1).toFixed(4);
-    }
+    // dispatch the event
 
     function dragMouseDown(e) {
         e = e || window.event;
@@ -288,10 +339,10 @@ function makeSlider(element, type) {
 
         if (type === "min") {
             selectedSlider.style.left = newLeft + "px";
-            document.getElementById("minGeneticDist").innerText = newValue.toFixed(4);
+            document.getElementById("minGeneticDist").innerText = exponential(newValue).toFixed(6);
         } else {
             selectedSlider.style.right = width - newLeft + "px";
-            document.getElementById("maxGeneticDist").innerText = newValue.toFixed(4);
+            document.getElementById("maxGeneticDist").innerText = exponential(newValue).toFixed(6);
         }
     }
 
@@ -313,7 +364,18 @@ function populateFriendsSection() {
     if(isNaN(min_dist)) min_dist = 0;
 
     // filter data 
-    let data_copy = data.filter((sample) => sample.distance >= min_dist && sample.distance <= max_dist);
+    let data_copy = data.filter((sample) => {
+        const has_ani = sample?.ani?.ani !== undefined;
+        let weighted_dist;
+        if(!has_ani){
+            weighted_dist = sample.mash_distance;
+        }else{
+         weighted_dist = (weight * similarityToDistance(sample?.ani?.ani)) + ((1-weight) * sample.mash_distance);
+        }
+        sample.distance = parseFloat(weighted_dist).toFixed(6);
+        sample.has_ani = has_ani;
+        return weighted_dist >= min_dist && weighted_dist <= max_dist
+    });
 
     if(data_copy.length === 0){
         // show a message saying no samples found
@@ -358,10 +420,19 @@ function createGenomeCard(sample) {
     let display = `<div class="genomeCardSampleId"><h4>${sample.sample_id}</h4></div>
         <div class="genomeCardSampleMetadata" style="text-align:left"> 
             <table>
-                <tr>
-                    <td><b>Distance</b></td>
+        ${sample.has_ani ?
+                `<tr>
+                    <td><b>Weighted Distance</b></td>
                     <td>${sample.distance}</td>
-                </tr>
+                </tr>`
+                : 
+                `
+                <tr><td><b>ANI Unavailable</b></td></tr>
+                <tr>
+                    <td><b>Mash Distance</b></td>
+                    <td>${sample.mash_distance}</td>
+                </tr>`
+            }
                 <tr>
                     <td><b>Isolation Host</b></td>
                     <td>${sample.isolation_host || 'Unknown'}</td>
@@ -397,7 +468,7 @@ function createGenomeCard(sample) {
 }
 
 function showLoadingElements() {
-    const graphId = "resultsPageGraphComponents";
+    const graphId = "lazy";
     const styleEl = document.head.appendChild(document.createElement("style"));
     styleEl.setAttribute("id", "loadingStyles");
     // pulse loading light grey to dark grey
@@ -435,7 +506,44 @@ function hideLoadingElements() {
     styleEl.parentNode.removeChild(styleEl);
 }
 
+/**
+    * @description Initialises the weighting slider so that it changes the weighting of 
+    *               mash vs ani
+    */
+function initWeightingSlider(){
+    // get the slider
+    const slider = document.getElementById("weightingInput");
+    // listen for changes
+    slider.addEventListener("input", (e) => {
+        // get the value
+        const value = e.target.value;
+        // set the weight
+        weight = value;
+        // update the text
+        document.getElementById("aniWeight").innerText = parseFloat(value).toFixed(2);
+        document.getElementById("mashWeight").innerText = (1-parseFloat(value)).toFixed(2);
+        // update the graph
+        populateFriendsSection();
+        updateCytoscape();
+    });
+    // run the eventListener once to set the initial values
+    slider.dispatchEvent(new Event("input"));
+}
 
+
+function initFilterSlider(){
+    // get the slider 
+    const slider = document.getElementById("cyMaxDistance");
+    // add the listener
+    slider.addEventListener("input", (e) => {
+        const value = e.target.value;
+        const exponentialValue = exponential(value);
+        document.getElementById('maxDist').innerHTML=exponentialValue.toFixed(6);
+        updateCytoscape();
+    });
+    // run the eventListener once to set the initial values
+    slider.dispatchEvent(new Event("input"));
+}
 
 
 window.onload = async function() {
@@ -449,10 +557,17 @@ window.onload = async function() {
     cy = createNetwork();
     data = await fetchCloseSamples();
 
+    initWeightingSlider();
+    initFilterSlider();
+
     populateNetwork();
+    updateCytoscape();
     populateFriendsSection();
     // hide loading elements
     hideLoadingElements();
+
+    // init tooltips
+    $('[data-toggle="tooltip"]').tooltip();
 }
 
 
