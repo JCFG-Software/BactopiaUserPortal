@@ -6,13 +6,14 @@
 <div id="queryListContainer">
     <div class="list-group">
         <form action='/result' method="get">
-        <% samples.forEach(function (result_samples) { %>
+        <% samples.forEach(function (sample) { %>
 
-        <button type="submit" name="sampleSelection" value="<%= result_samples.sample%>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
-            Sample: <%= result_samples.sample %>,
-            Species: <%= result_samples.species %>,
-            Runtype: <%= result_samples.runtype %>,
-            Genome Size: <%= result_samples.genome_size %>,
+        <button type="submit" name="sampleSelection" value="<%= sample.sample%>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+        Run:     <%= sample.sample %><br>
+        Species: <%= sample.species %><br>
+        Host:    <%= sample.isolation_host %><br>
+		Source: <%= sample.isolation_source %><br>
+		Location: <%= sample.isolation_location %>
       </button>
 
         <% }) %>
@@ -21,4 +22,4 @@
         <br>
         <p style="text-align: center"> Displaying result(s) <%= number %> of <%= number %></p>
     </div>
-</div>
+</div
