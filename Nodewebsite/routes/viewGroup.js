@@ -29,7 +29,7 @@ router.get('/', async function (req, res, next) {
         Promise.all([getGroupsInfo, getSampleIds, getSharingInfo]).then(async function([groupInfo, sampleIds, sharingInfo]) {
           groupInfo = groupInfo[0];
           if (sampleIds.length < 1) {
-            sampleIds = [ { sample_id: -1 } ];
+            sampleIds = [];
           }
           let status = "Your"; // Tag group status for user
           if (sharingInfo.length >= 1) {
@@ -48,9 +48,6 @@ router.get('/', async function (req, res, next) {
             sharingInfo = cleanedSharingInfo;
           }
           groupInfo.status = status;
-
-          if (sampleIds[0].sample_id != -1) {
-
             const allSamples = sampleIds.map((sample) => {
                 const sampleData = getGatherData(sample.sample_id);
                 const mlst = getMLST(sample.sample_id);
@@ -74,51 +71,14 @@ router.get('/', async function (req, res, next) {
               samples.time = metadatas[0].time_of_sampling
               samples.notes = metadatas[0].notes
             }
-        } else {
-          allSamples = [];
-        }
-          /* Original database query
-          req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
-          name: 'sample_sample.name', id: 'sample_sample.id'})
-              .from('mlst_mlst')
-              .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
-              .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-              .modify(function (queryBuilder) {
-                  queryBuilder.where('mlst_mlst.sample_id', sampleIds[0].sample_id || 0);
-                  for (i = 1; i < sampleIds.length; i++) {
-                    queryBuilder.orWhere('mlst_mlst.sample_id', sampleIds[i].sample_id);
-                  }
-              })
-              .then((sampleInfos) => {
-                //console.log(sampleInfos);
-                for(sampleInfo of sampleInfos) {
-                  sampleInfo.country = sampleInfo.metadata.country;
-                  sampleInfo.strain = sampleInfo.metadata.strain;
-                  sampleInfo.host = sampleInfo.metadata.host;
-                  sampleInfo.isolation_source = sampleInfo.metadata.isolation_source;
-                }
-                if (groupInfo == undefined) {
-                  res.render('pages/error', errorPageConfig);
-                  return;
-                }
-                //console.log(sharingInfo);
-
-                res.render('pages/viewGroup', {
-                    userLoggedIn: req.userLoggedIn,
-                    samples: sampleInfos,
-                    groupInfo: groupInfo,
-                    sharingInfo: sharingInfo,
-                    email: req.session.userEmail
-                });
-              }); */
-
-              res.render('pages/viewGroup', {
-                userLoggedIn: req.userLoggedIn,
-                samples: allSamples,
-                groupInfo: groupInfo,
-                sharingInfo: sharingInfo,
-                email: req.session.userEmail
-              });
+            
+          res.render('pages/viewGroup', {
+            userLoggedIn: req.userLoggedIn,
+            samples: allSamples,
+            groupInfo: groupInfo,
+            sharingInfo: sharingInfo,
+            email: req.session.userEmail
+            });
         })
         .catch(function(err) {
           console.log(err);
