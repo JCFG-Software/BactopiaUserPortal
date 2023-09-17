@@ -130,33 +130,6 @@
     </div>
 
     <div id="resultsPageSampleExpandableInformation">
-    <% /* %>
-      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Tags</button>
-      <div class="sectionContent">
-        <table class="adjustedTable">
-            <% tag_tag.forEach(function (result_tag_tag) { %>
-            <tr>
-                <td><b>Tag:</b></td>
-                <td>
-                    <%= result_tag_tag.tag %>
-                </td>
-            </tr>
-            <tr>
-                <td><b>Comment:</b></td>
-                <td>
-                    <%= result_tag_tag.comment %>
-                </td>
-            </tr>
-            <% }) %>
-        </table>
-      </div>
-
-      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Metadata</button>
-      <div class="sectionContent" id="Metadata">
-          <% include ../snippets/resultMetadata %>
-      </div>
-
-    <% */ %>
       <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Sequencing Metrics</button>
       <div class="sectionContent" id="Sequencing">
         <% include ../snippets/resultSequence %>
@@ -199,24 +172,6 @@
         <% include ../snippets/resultAnnotations %>
       </div>
     <% } %>
-
-    <% /* %>
-      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>SCCmec Primer Hits</button>
-      <div class="sectionContent"  id="Sccmec_Primers">
-        <% include ../snippets/resultSccmecPrimers %>
-      </div>
-
-      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>SCCmec Subtype Hits</button>
-      <div class="sectionContent" id="Sccmec_Subtypes">
-        <% include ../snippets/resultSccmecSubtypes %>
-      </div>
-
-      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>SCCmec Protein Hits</button>
-      <div class="sectionContent" id="Sccmec_Proteins">
-          <% include ../snippets/resultSccmecProteins.ejs %>
-      </div>
-    </div>
-    <% */ %>
 
     <!--Result page interactive element-->
     <div id="resultsPageGraphComponents">
