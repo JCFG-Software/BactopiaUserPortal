@@ -49,36 +49,34 @@ router.get('/', async function (req, res, next) {
           }
           groupInfo.status = status;
 
-          // For each sample, we need to provide:
-            // 1. id - string
-            // 2. Sample Length - int
-            // 3. Sample Species - string
-            // 4. Sequence Type - int
-          const allSamples = sampleIds.map((sample) => {
-              const sampleData = getGatherData(sample.sample_id);
-              const mlst = getMLST(sample.sample_id);
-              return {
-                    id: sample.sample_id,
-                    length: sampleData?.genome_size,
-                    species: sampleData?.species,
-                    sequenceType: mlst?.sequence_type
-              }
-          });
-          // Loop through each sample in allSamples and append metadata from knex
-          for (const samples of allSamples) {
-            const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes').from('metadata')
-            .where({sample_id: samples.id}).orderBy('created', 'desc');
-            if (metadatas.length == 0) {
-                metadatas.push({isolation_host: 'Unknown', isolation_source: 'Unknown', isolation_location: 'Unknown', time_of_sampling: 'Unknown', notes: 'None'})
-            }
-            samples.host = metadatas[0].isolation_host
-            samples.source = metadatas[0].isolation_source
-            samples.location = metadatas[0].isolation_location
-            samples.time = metadatas[0].time_of_sampling
-            samples.notes = metadatas[0].notes
-        }
-          //Need to get metadata for each sample
+          if (sampleIds[0].sample_id != -1) {
 
+            const allSamples = sampleIds.map((sample) => {
+                const sampleData = getGatherData(sample.sample_id);
+                const mlst = getMLST(sample.sample_id);
+                return {
+                      id: sample.sample_id,
+                      length: sampleData?.genome_size,
+                      species: sampleData?.species,
+                      sequenceType: mlst?.sequence_type
+                }
+            });
+            // Loop through each sample in allSamples and append metadata from knex
+            for (const samples of allSamples) {
+              const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes').from('metadata')
+              .where({sample_id: samples.id}).orderBy('created', 'desc');
+              if (metadatas.length == 0) {
+                  metadatas.push({isolation_host: 'Unknown', isolation_source: 'Unknown', isolation_location: 'Unknown', time_of_sampling: 'Unknown', notes: 'None'})
+              }
+              samples.host = metadatas[0].isolation_host
+              samples.source = metadatas[0].isolation_source
+              samples.location = metadatas[0].isolation_location
+              samples.time = metadatas[0].time_of_sampling
+              samples.notes = metadatas[0].notes
+            }
+        } else {
+          allSamples = [];
+        }
           /* Original database query
           req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
           name: 'sample_sample.name', id: 'sample_sample.id'})

@@ -89,14 +89,36 @@
                 </td>
             </tr>
             <% }) %>
-            <% Object.keys(userMeta[0]).forEach(function (key) { %>
             <tr>
-                <td><b><%= key %></b></td>
+                <td><b>Host</b></td>
                 <td>
-                    <%= userMeta[0][key] %>
+                    <%= userMeta[0]?.isolation_host ?? "Unknown" %>
                 </td>
             </tr>
-            <% }) %>
+            <tr>
+                <td><b>Location</b></td>
+                <td>
+                    <%= userMeta[0]?.isolation_location ?? "Unknown" %>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Source</b></td>
+                <td>
+                    <%= userMeta[0]?.isolation_source ?? "Unknown" %>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Time of Sampling</b></td>
+                <td>
+                    <%= userMeta[0]?.time_of_sampling ?? "Unknown" %>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Notes</b></td>
+                <td>
+                    <%= userMeta[0]?.notes ?? "None"%>
+                </td>
+            </tr>
         </table>
         <hr style="width: 55%">
 
