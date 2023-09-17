@@ -15,11 +15,26 @@ router.get('/', async function(req, res) {
 
     // if the search is a metadata search, just use db
     if (category === "isolation_host" || category === "isolation_location" || category === "isolation_source" || category === "time_of_sampling") {
-        await req.knex.select("sample_id").distinctOn('sample_id')
-            .from('metadata')
+        // await req.knex.select("sample_id").distinctOn('sample_id')
+        //     .from('metadata')
+        //     .where(category, 'ILIKE', '%' + query + '%')
+        //     .orderBy('sample_id', 'asc')
+        //     .orderBy('created', 'desc')
+        //     .then((results) => {
+        //         result = results.map((r) => r.sample_id);
+        //     })
+        //     .catch((err) => {
+        //         log(err);
+        //     });
+        // the above, but only the where clauses on the distinct sample_ids
+        await req.knex.select("sample_id").from(
+            req.knex.select("*").distinctOn('sample_id')
+                .from('metadata')
+                .orderBy('sample_id', 'asc')
+                .orderBy('created', 'desc')
+                .as('metadata')
+        )
             .where(category, 'ILIKE', '%' + query + '%')
-            .orderBy('sample_id', 'asc')
-            .orderBy('created', 'desc')
             .then((results) => {
                 result = results.map((r) => r.sample_id);
             })
