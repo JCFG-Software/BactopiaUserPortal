@@ -8,6 +8,10 @@ const log = require('debug')('routes:searchResults');
 // TODO: Add better error handling and communication
 //
 router.get('/', async function(req, res) {
+    let userLoggedIn = false;
+    if (req.session.userStatus === "loggedIn") {
+        userLoggedIn = true;
+    }
     const category = req.query.category;
     const query = req.query.query;
     log(`Searching for ${query} in ${category}`);
@@ -56,7 +60,7 @@ router.get('/', async function(req, res) {
 
     });
     log(`Rendering with ${query}`);
-    res.render('pages/searchResults', { samples, query, category, number: samples.length, userLoggedIn: res.locals.userLoggedIn })
+    res.render('pages/searchResults', { samples, query, category, number: samples.length, userLoggedIn: userLoggedIn })
 
 });
 
