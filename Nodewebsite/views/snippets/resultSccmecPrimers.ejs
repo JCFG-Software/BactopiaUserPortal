@@ -1,0 +1,40 @@
+<table style="width: 100%;">
+    <tr>
+        <th>Title</th>
+        <th>Contig</th>
+        <th>Hamming Distance</th>
+        <th>Bitscore</th>
+        <th>Evalue</th>
+        <th>Identity</th>
+        <th>Mismatch</th>
+        <th>Gaps</th>
+        <th>Query From</th>
+        <th>Query To</th>
+        <th>Hit From</th>
+        <th>Hit To</th>
+        <th>Align Length</th>
+        <th>Qseq</th>
+        <th>Hseq</th>
+    </tr>
+    <% sccmec_primers.forEach(function (result_sccmec_primers) { %>
+    <tr>
+        <td > <%= staphopia_blatstquery[result_sccmec_primers.query_id-1].title %> </td>
+        <td > <%= result_sccmec_primers.contig %> </td>
+        <td > <%= result_sccmec_primers.hamming_distance %> </td>
+        <td > <%= result_sccmec_primers.bitscore %> </td>
+        <td > <%= result_sccmec_primers.evalue %> </td>
+        <td > <%= result_sccmec_primers.identity %> </td>
+        <td > <%= result_sccmec_primers.mismatch %> </td>
+        <td > <%= result_sccmec_primers.gaps %> </td>
+        <td > <%= result_sccmec_primers.query_from %> </td>
+        <td > <%= result_sccmec_primers.query_to %> </td>
+        <td > <%= result_sccmec_primers.hit_from %> </td>
+        <td > <%= result_sccmec_primers.hit_to %> </td>
+        <td > <%= result_sccmec_primers.align_len %> </td>
+        <td > <%= result_sccmec_primers.qseq %> </td>
+        <td > <%= result_sccmec_primers.hseq %> </td>
+
+    </tr>
+
+    <% }) %>
+</table>

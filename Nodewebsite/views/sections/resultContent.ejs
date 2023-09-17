@@ -33,132 +33,82 @@
                     <button onclick="remGroup(this.value)" value=<%=group.group_id%> class="groupLabel">
                         <%= group.name %>
                     </button>
-                <% }) %>
-                <button class="dropDownButton" onclick="addToGroup(this.value)" value="create">
-                    Create new group
-                </button>
-            </div>
-            <button type="button" id="downloadSampleInfo" onclick="downloadInfo()" title="Download Sample Information"
-                    class="btn btn-outline-dark btn-sm">
-                <i class="fas fa-download" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-            </button>
-            <button type="button" id="downloadButton" onclick="window.location.href='/addMetadata'" aria-haspopup="true" aria-expanded="false">
-                Update Metadata
-            </button>
-            <button type="button" id="downloadButton" onclick="viewMetaHistory()" aria-haspopup="true" aria-expanded="false">
-                Metadata History
-            </button>
-        </div>
-        <!--  close favDiv -->
-        <% } else { %>
-          <button type="button" id="downloadSampleInfo" onclick="downloadInfo()" title="Download Sample Information"
-                  class="btn btn-outline-dark btn-sm">
-              <i class="fas fa-download" style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-          </button>
-        <% } %>
-        <!-- close if userLogged in -->
+                    <% }) %>
 
-        <!-- Sample summary information -->
-        <hr style="width: 55%; margin-top: -2px"></hr>
-        <h4 style="text-align: center"> Summary </h4>
-        <!--as a table -->
-        <table class="summaryTable">
-            <% Object.keys(summary).forEach(function (key) { %>
-            <tr>
-                <td><b><%= key %></b></td>
-                <td>
-                    <%= summary[key] %>
-                </td>
-            </tr>
-            <% }) %>
-            <tr>
-                <td><b>Host</b></td>
-                <td>
-                    <%= userMeta[0]?.isolation_host ?? "Unknown" %>
-                </td>
-            </tr>
-            <tr>
-                <td><b>Location</b></td>
-                <td>
-                    <%= userMeta[0]?.isolation_location ?? "Unknown" %>
-                </td>
-            </tr>
-            <tr>
-                <td><b>Source</b></td>
-                <td>
-                    <%= userMeta[0]?.isolation_source ?? "Unknown" %>
-                </td>
-            </tr>
-            <tr>
-                <td><b>Time of Sampling</b></td>
-                <td>
-                    <%= userMeta[0]?.time_of_sampling ?? "Unknown" %>
-                </td>
-            </tr>
-            <tr>
-                <td><b>Notes</b></td>
-                <td>
-                    <%= userMeta[0]?.notes ?? "None"%>
-                </td>
-            </tr>
-        </table>
-        <hr style="width: 55%">
+                        <div class="dropdown">
+                            <button id="downloadButton" type="button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                Add to Group
+                            </button>
+                            <div id="groupDropDownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <% avail_groups.filter(g=> !in_groups.includes(g)).forEach(function (group) { %>
+                                    <button class="dropDownButton" onclick="addToGroup(this.value)"
+                                        value=<%=group.group_id %>>
+                                        <%= group.name %>
+                                    </button>
+                                    <% }) %>
+                                        <button class="dropDownButton" onclick="addToGroup(this.value)" value="create">
+                                            Create new group
+                                        </button>
+                            </div>
+                            <button type="button" id="downloadSampleInfo" onclick="downloadInfo()"
+                                title="Download Sample Information" class="btn btn-outline-dark btn-sm">
+                                <i class="fas fa-download"
+                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+                            </button>
+                            <button type="button" id="downloadButton" onclick="window.location.href='/addMetadata'"
+                                aria-haspopup="true" aria-expanded="false">
+                                Update Metadata
+                            </button>
+                            <button type="button" id="downloadButton" onclick="viewMetaHistory()" aria-haspopup="true"
+                                aria-expanded="false">
+                                Metadata History
+                            </button>
+                        </div>
+                        <!--  close favDiv -->
+                        <% } else { %>
+                            <button type="button" id="downloadSampleInfo" onclick="downloadInfo()"
+                                title="Download Sample Information" class="btn btn-outline-dark btn-sm">
+                                <i class="fas fa-download"
+                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+                            </button>
+                            <% } %>
+                                <!-- close if userLogged in -->
+
+                                <!-- Sample summary information -->
+                                <hr style="width: 55%; margin-top: -2px">
+                                </hr>
+                                <h4 style="text-align: center"> Summary </h4>
+                                <!--as a table -->
+                                <table class="summaryTable">
+                                    <% Object.keys(summary).forEach(function (key) { %>
+                                        <tr>
+                                            <td><b>
+                                                    <%= key %>
+                                                </b></td>
+                                            <td>
+                                                <%= summary[key] %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% Object.keys(userMeta[0]).forEach(function (key) { %>
+                                                <tr>
+                                                    <td><b>
+                                                            <%= key %>
+                                                        </b></td>
+                                                    <td>
+                                                        <%= userMeta[0][key] %>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                </table>
+                                <hr style="width: 55%">
 
 
-        </hr>
-        <h3 style="text-align: center" style="margin-top: 1em;"> Sample Information
-        </h3>
+                                </hr>
+                                <h3 style="text-align: center" style="margin-top: 1em;"> Sample Information
+                                </h3>
 
-    </div>
-
-    <div id="resultsPageSampleExpandableInformation">
-      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Sequencing Metrics</button>
-      <div class="sectionContent" id="Sequencing">
-        <% include ../snippets/resultSequence %>
-      </div>
-
-      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Assembly Metrics</button>
-      <div class="sectionContent" id="Assembly">
-        <% include ../snippets/resultAssembly %>
-      </div>
-
-    <% if (locals.mlst) { %>
-      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>MLST</button>
-      <div class="sectionContent" id="MLST">
-        <table style="width: 100%;">
-            <tr> 
-                <td><b>Filename </b></td>
-                <td colspan=<%= mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.filename %></td>
-            </tr>
-            <tr> 
-                <td><b>PubMLST Scheme </b></td>
-                <td colspan=<%= mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.scheme %></td>
-            </tr>
-            <tr> 
-                <td><b>Sequence Type</b></td>
-                <td colspan=<%= mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.sequence_type %></td>
-            </tr>
-            <tr> 
-                <td><b>Allele IDs</b></td>
-                <% mlst.alleles.forEach(allele => { %>
-                <td><%=allele%></td>
-                <% }) %>
-            </tr>
-        </table>
-      </div>
-    <% } %>
-
-    <% if (locals.annotations){ %>
-      <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Annotations</button>
-      <div class="sectionContent" id="Assembly">
-        <% include ../snippets/resultAnnotations %>
-      </div>
-    <% } %>
-
-    <!--Result page interactive element-->
-    <div id="resultsPageGraphComponents">
-        <div id="resultsPageGraphComponent1">
-            <h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
         </div>
 
         <div id="resultsPageSampleExpandableInformation">

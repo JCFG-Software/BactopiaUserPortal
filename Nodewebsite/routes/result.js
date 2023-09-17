@@ -86,6 +86,9 @@ router.get('/', async function(req, res) {
 
     const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes', 'email', 'created').from('metadata')
     .where({sample_id: sampleName}).orderBy('created', 'desc');
+    if (metadatas.length == 0) {
+        metadatas.push({isolation_host: 'Unknown', isolation_source: 'Unknown', isolation_location: 'Unknown', time_of_sampling: 'Unknown', notes: 'None'})
+    }
     console.log(metadatas)
     // Tools - May or may not exist
     const mlst = getMLSTData(sampleName);

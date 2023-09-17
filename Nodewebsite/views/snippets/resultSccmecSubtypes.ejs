@@ -1,0 +1,40 @@
+<table style="width: 100%;">
+    <tr>
+        <th>Title</th>
+        <th>Contig</th>
+        <th>Hamming Distance</th>
+        <th>Bitscore</th>
+        <th>Evalue</th>
+        <th>Identity</th>
+        <th>Mismatch</th>
+        <th>Gaps</th>
+        <th>Query From</th>
+        <th>Query To</th>
+        <th>Hit From</th>
+        <th>Hit To</th>
+        <th>Align Length</th>
+        <th>Qseq</th>
+        <th>Hseq</th>
+    </tr>
+    <% sccmec_subtypes.forEach(function (result_sccmec_subtypes) { %>
+    <tr>
+        <td > <%= staphopia_blatstquery[result_sccmec_subtypes.query_id-1].title %> </td>
+        <td > <%= result_sccmec_subtypes.contig %> </td>
+        <td > <%= result_sccmec_subtypes.hamming_distance %> </td>
+        <td > <%= result_sccmec_subtypes.bitscore %> </td>
+        <td > <%= result_sccmec_subtypes.evalue %> </td>
+        <td > <%= result_sccmec_subtypes.identity %> </td>
+        <td > <%= result_sccmec_subtypes.mismatch %> </td>
+        <td > <%= result_sccmec_subtypes.gaps %> </td>
+        <td > <%= result_sccmec_subtypes.query_from %> </td>
+        <td > <%= result_sccmec_subtypes.query_to %> </td>
+        <td > <%= result_sccmec_subtypes.hit_from %> </td>
+        <td > <%= result_sccmec_subtypes.hit_to %> </td>
+        <td > <%= result_sccmec_subtypes.align_len %> </td>
+        <td > <%= result_sccmec_subtypes.qseq %> </td>
+        <td > <%= result_sccmec_subtypes.hseq %> </td>
+
+    </tr>
+
+    <% }) %>
+</table>
