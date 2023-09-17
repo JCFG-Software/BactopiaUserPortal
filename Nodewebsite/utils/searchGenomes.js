@@ -9,9 +9,6 @@ const categories = {
     'annotations': '/**/annotator/prokka/*.tsv',
     'species':  '/**/gather/*.tsv',
     'sequence_type': '/**/mlst/*.tsv',
-    /**
-    sra_accession
-     **/
 }
 
 
