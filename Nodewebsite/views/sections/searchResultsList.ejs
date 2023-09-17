@@ -9,11 +9,11 @@
         <% samples.forEach(function (sample) { %>
 
         <button type="submit" name="sampleSelection" value="<%= sample.sample%>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
-        Run:     <%= sample.sample %><br>
-        Species: <%= sample.species %><br>
-        Host:    <%= sample.isolation_host %><br>
-		Source: <%= sample.isolation_source %><br>
-		Location: <%= sample.isolation_location %>
+        Run:     <%= sample.sample ?? "Unknown"%><br>
+        Species: <%= sample.species ?? "Unknown"%><br>
+        Host:    <%= sample.isolation_host ?? "Unknown"%><br>
+		Source: <%= sample.isolation_source ?? "Unknown"%><br>
+		Location: <%= sample.isolation_location ?? "Unknown"%>
       </button>
 
         <% }) %>

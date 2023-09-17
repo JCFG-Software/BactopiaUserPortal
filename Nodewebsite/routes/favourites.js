@@ -56,32 +56,6 @@ router.get('/', async function(req, res) {
         }
 
         res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: favorites, haveFavs: true });
-
-        /*
-        .then(favs => {
-            req.knex.select({st: 'mlst_mlst.st', sample_id: 'sample_metadata.sample_id', metadata: 'sample_metadata.metadata',
-                name: 'sample_sample.name', id: 'sample_sample.id'}) //TODO: refactor so id is removed
-                .from('mlst_mlst')
-                .innerJoin('sample_sample', 'mlst_mlst.sample_id', 'sample_sample.id')
-                .innerJoin('sample_metadata', 'mlst_mlst.sample_id', 'sample_metadata.sample_id')
-                .modify(function (queryBuilder) {
-                    queryBuilder.where('mlst_mlst.sample_id', favs[0].sample_id || 0);
-                    for (i = 1; i < favs.length; i++) {
-                        queryBuilder.orWhere('mlst_mlst.sample_id', favs[i].sample_id);
-                    }
-                })
-                .then((sampleInfos) => {
-                    //console.log(sampleInfos);
-                    for (sampleInfo of sampleInfos) {
-                        sampleInfo.country = sampleInfo.metadata.country;
-                        sampleInfo.strain = sampleInfo.metadata.strain;
-                        sampleInfo.host = sampleInfo.metadata.host;
-                        sampleInfo.isolation_source = sampleInfo.metadata.isolation_source;
-                    }
-                    
-                    res.render('pages/favourites', { userLoggedIn: userLoggedIn, favorites: sampleInfos, haveFavs: true });
-                });
-        });*/
     }
     else {
         // redirect to '/'
