@@ -31,7 +31,10 @@ router.get('/', async function(req, res) {
         //         log(err);
         //     });
         // the above, but only the where clauses on the distinct sample_ids
-        await req.knex.select("sample_id").from(
+        await req.knex.select(
+            "sample_id",
+            'isolation_host', 'isolation_location', 'isolation_source', 'time_of_sampling',
+        ).from(
             req.knex.select("*").distinctOn('sample_id')
                 .from('metadata')
                 .orderBy('sample_id', 'asc')
@@ -40,7 +43,7 @@ router.get('/', async function(req, res) {
         )
             .where(category, 'ILIKE', '%' + query + '%')
             .then((results) => {
-                result = results.map((r) => r.sample_id);
+                result = results;
             })
             .catch((err) => {
                 log(err);
@@ -54,11 +57,40 @@ router.get('/', async function(req, res) {
             log(err);
         }
     }
-    // Get some metadata about the samples that have been returned. Limit to 50
-    const samples = result.slice(0, 50).map((sample) => {
-        return getGatherData(sample);
+    // at this stage, result is an array of sample_ids OR an array of objects with sample_ids and metadata already
+    if (result.length === 0) {
+        log("No results found");
+    }else if (result[0]?.sample_id) {
+        // objects, add gather data
+        result = result.map((r) => {
+            return { 
+                result, 
+            ...getGatherData(r.sample_id)
+            }
+        });
+    }else{
+        // just sample names, add metadata and gather data
+        const metadata = await req.knex.select(
+            "sample_id",
+            'isolation_host', 'isolation_location', 'isolation_source', 'time_of_sampling',
+        ).distinctOn('sample_id')
+            .from('metadata')
+            .whereIn('sample_id', result)
+            .orderBy('sample_id', 'asc')
+            .orderBy('created', 'desc');
+        result = result.map((r) => {
+            const sampleMetadata = metadata.find((m) => m.sample_id === r);
+            return {
+                sample_id: r,
+                ...sampleMetadata,
+                ...getGatherData(r),
+            };
+        });
+    }
 
-    });
+
+    // Get some metadata about the samples that have been returned. Limit to 50
+    const samples = result.slice(0, 50);
     log(`Rendering with ${query}`);
     res.render('pages/searchResults', { samples, query, category, number: samples.length, userLoggedIn: userLoggedIn })
 
