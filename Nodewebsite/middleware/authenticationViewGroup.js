@@ -28,12 +28,16 @@ function checkUserHasAccess(req, res, next) {
                                  this.select({group_id: 'group_id', email: 'share_to_email'}).from('group_sharing')
                                });
 
-  // Check user has editting rights
+  // Check user has editing rights
   req.knex
       .select('*')
       .from({summary: collaboratorSummary})
       .where({group_id: groupId || 0})
-      .andWhere({email: userEmail || ""})
+      // and email is the user's email or public
+        .andWhere(function() {
+            this.where({email: userEmail})
+            .orWhere({email: "_public_all_users_"})
+        })
       .then((collaborators)=> {
         console.log(collaborators)
         if (collaborators.length < 1) { // Fix for async
