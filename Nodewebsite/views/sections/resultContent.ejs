@@ -14,14 +14,15 @@
                 Sample <%- sample_ID %>
             </h1>
 
-            <!--Check if the user is logged in-->
             <% if (userLoggedIn) { %>
                 <div id="favDiv" style="margin-left: auto; margin-right: auto; width: 50px; margin-bottom: 6px;">
 
                 </div>
                 <form method="POST" id="favoriteButtonForm">
                     <button type="submit" class="btn btn-outline-dark btn-sm" title="Favorite Button"
-                        id="favoriteButton" style="margin-left: 2px; margin-right: 2px; color: <%= isFavourited ? "#cf2b51" : "#ebebeb" %>;">
+                        id="favoriteButton"
+                        style="margin-left: 2px; margin-right: 2px; color: <%= isFavourited ?  '#cf2b51' : '#ebebeb'
+                        %>;">
                         <i id="favoriteButtonHeart" class="fas fa-heart"
                             style="font-size:20px; text-align: center; padding-left: 20px; padding-right: 20px;"></i>
                     </button>
@@ -73,7 +74,6 @@
                                     style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
                             </button>
                             <% } %>
-                                <!-- close if userLogged in -->
 
                                 <!-- Sample summary information -->
                                 <hr style="width: 55%; margin-top: -2px">
@@ -91,16 +91,36 @@
                                             </td>
                                         </tr>
                                         <% }) %>
-                                            <% Object.keys(userMeta[0]).forEach(function (key) { %>
-                                                <tr>
-                                                    <td><b>
-                                                            <%= key %>
-                                                        </b></td>
-                                                    <td>
-                                                        <%= userMeta[0][key] %>
-                                                    </td>
-                                                </tr>
-                                                <% }) %>
+                                            <tr>
+                                                <td><b>Host</b></td>
+                                                <td>
+                                                    <%= userMeta[0]?.isolation_host ?? "Unknown" %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Location</b></td>
+                                                <td>
+                                                    <%= userMeta[0]?.isolation_location ?? "Unknown" %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Source</b></td>
+                                                <td>
+                                                    <%= userMeta[0]?.isolation_source ?? "Unknown" %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Time of Sampling</b></td>
+                                                <td>
+                                                    <%= userMeta[0]?.time_of_sampling ?? "Unknown" %>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Notes</b></td>
+                                                <td>
+                                                    <%= userMeta[0]?.notes ?? "None" %>
+                                                </td>
+                                            </tr>
                                 </table>
                                 <hr style="width: 55%">
 
@@ -112,282 +132,236 @@
         </div>
 
         <div id="resultsPageSampleExpandableInformation">
-            <% /* %>
+            <button type="button" class="collapsible"><span
+                    class="material-icons v">keyboard_arrow_down</span>Sequencing Metrics</button>
+            <div class="sectionContent" id="Sequencing">
+                <% include ../snippets/resultSequence %>
+            </div>
+
+            <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Assembly
+                Metrics</button>
+            <div class="sectionContent" id="Assembly">
+                <% include ../snippets/resultAssembly %>
+            </div>
+
+            <% if (locals.mlst) { %>
                 <button type="button" class="collapsible"><span
-                        class="material-icons v">keyboard_arrow_down</span>Tags</button>
-                <div class="sectionContent">
-                    <table class="adjustedTable">
-                        <% tag_tag.forEach(function (result_tag_tag) { %>
-                            <tr>
-                                <td><b>Tag:</b></td>
+                        class="material-icons v">keyboard_arrow_down</span>MLST</button>
+                <div class="sectionContent" id="MLST">
+                    <table style="width: 100%;">
+                        <tr>
+                            <td><b>Filename </b></td>
+                            <td colspan=<%=mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.filename %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>PubMLST Scheme </b></td>
+                            <td colspan=<%=mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.scheme %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Sequence Type</b></td>
+                            <td colspan=<%=mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.sequence_type %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Allele IDs</b></td>
+                            <% mlst.alleles.forEach(allele=> { %>
                                 <td>
-                                    <%= result_tag_tag.tag %>
+                                    <%=allele%>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td><b>Comment:</b></td>
-                                <td>
-                                    <%= result_tag_tag.comment %>
-                                </td>
-                            </tr>
-                            <% }) %>
+                                <% }) %>
+                        </tr>
                     </table>
                 </div>
+                <% } %>
 
-                <button type="button" class="collapsible"><span
-                        class="material-icons v">keyboard_arrow_down</span>Metadata</button>
-                <div class="sectionContent" id="Metadata">
-                    <% include ../snippets/resultMetadata %>
-                </div>
-
-                <% */ %>
-                    <button type="button" class="collapsible"><span
-                            class="material-icons v">keyboard_arrow_down</span>Sequencing Metrics</button>
-                    <div class="sectionContent" id="Sequencing">
-                        <% include ../snippets/resultSequence %>
-                    </div>
-
-                    <button type="button" class="collapsible"><span
-                            class="material-icons v">keyboard_arrow_down</span>Assembly Metrics</button>
-                    <div class="sectionContent" id="Assembly">
-                        <% include ../snippets/resultAssembly %>
-                    </div>
-
-                    <% if (locals.mlst) { %>
+                    <% if (locals.annotations){ %>
                         <button type="button" class="collapsible"><span
-                                class="material-icons v">keyboard_arrow_down</span>MLST</button>
-                        <div class="sectionContent" id="MLST">
-                            <table style="width: 100%;">
-                                <tr>
-                                    <td><b>Filename </b></td>
-                                    <td colspan=<%=mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.filename %>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><b>PubMLST Scheme </b></td>
-                                    <td colspan=<%=mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.scheme %>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><b>Sequence Type</b></td>
-                                    <td colspan=<%=mlst.alleles ? mlst.alleles.length : 1%>><%= mlst.sequence_type %>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><b>Allele IDs</b></td>
-                                    <% mlst.alleles.forEach(allele=> { %>
-                                        <td>
-                                            <%=allele%>
-                                        </td>
-                                        <% }) %>
-                                </tr>
-                            </table>
+                                class="material-icons v">keyboard_arrow_down</span>Annotations</button>
+                        <div class="sectionContent" id="Assembly">
+                            <% include ../snippets/resultAnnotations %>
                         </div>
                         <% } %>
 
-                            <% if (locals.annotations){ %>
-                                <button type="button" class="collapsible"><span
-                                        class="material-icons v">keyboard_arrow_down</span>Annotations</button>
-                                <div class="sectionContent" id="Assembly">
-                                    <% include ../snippets/resultAnnotations %>
-                                </div>
-                                <% } %>
+                            <div id="lazy">
+                                <!--Result page interactive element-->
+                                <div id="resultsPageGraphComponents">
+                                    <div id="resultsPageGraphComponent1">
+                                        <h6 id="displayDescription">Functional network of related genomes and genomic
+                                            interaction</h6>
+                                    </div>
+                                    <!-- close resultsPageGraphComponent1 -->
 
-                                    <% /* %>
-                                        <button type="button" class="collapsible"><span
-                                                class="material-icons v">keyboard_arrow_down</span>SCCmec Primer
-                                            Hits</button>
-                                        <div class="sectionContent" id="Sccmec_Primers">
-                                            <% include ../snippets/resultSccmecPrimers %>
-                                        </div>
-
-                                        <button type="button" class="collapsible"><span
-                                                class="material-icons v">keyboard_arrow_down</span>SCCmec Subtype
-                                            Hits</button>
-                                        <div class="sectionContent" id="Sccmec_Subtypes">
-                                            <% include ../snippets/resultSccmecSubtypes %>
-                                        </div>
-
-                                        <button type="button" class="collapsible"><span
-                                                class="material-icons v">keyboard_arrow_down</span>SCCmec Protein
-                                            Hits</button>
-                                        <div class="sectionContent" id="Sccmec_Proteins">
-                                            <% include ../snippets/resultSccmecProteins.ejs %>
-                                        </div>
-        </div>
-        <% */ %>
-
-            <div id="lazy">
-                <!--Result page interactive element-->
-                <div id="resultsPageGraphComponents">
-                    <div id="resultsPageGraphComponent1">
-                        <h6 id="displayDescription">Functional network of related genomes and genomic interaction</h6>
-                    </div>
-                    <!-- close resultsPageGraphComponent1 -->
-
-                    <div id="resultsPageGraphComponent2">
-                        <div id="interactiveGraph">
-                            <button type="button" id="centerGraph" onclick="centerCy()" title="Center graph"
-                                class="btn btn-outline-dark btn-sm">
-                                <i class="fas fa-expand"
-                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-                            </button>
-                            <button type="button" id="downloadGraph" onclick="saveCy()" title="Download current view"
-                                class="btn btn-outline-dark btn-sm">
-                                <i class="fas fa-file-image"
-                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-                            </button>
-                            <button type="button" id="zoomInGraph" onclick="zoomInCy()" title="Zoom in on graph"
-                                class="btn btn-outline-dark btn-sm">
-                                <i class="fa fa-search-plus"
-                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-                            </button>
-                            <button type="button" id="zoomOutGraph" onclick="zoomOutCy()" title="Zoom out on graph"
-                                class="btn btn-outline-dark btn-sm">
-                                <i class="fa fa-search-minus"
-                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-                            </button>
-                            <a href="#interactiveGraph" id="expandGraph" onclick="fullScreenCy()"
-                                title="Make graph full screen" class="btn btn-outline-dark btn-sm">
-                                <i class="fas fa-long-arrow-alt-up"
-                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-                            </a>
-                            <button type="button" id="minimizeGraph" onclick="minimizeCy()"
-                                title="Minimize graph to original size" class="btn btn-outline-dark btn-sm">
-                                <i class="fas fa-long-arrow-alt-down"
-                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
-                            </button>
-                            <% if (userLoggedIn) { %>
-                                <div class="dropdown">
-                                    <button id="downloadButton" type="button" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        Add visible samples to Group
-                                    </button>
-                                    <div id="groupDropDownMenu" class="dropdown-menu"
-                                        aria-labelledby="dropdownMenuButton">
-                                        <% avail_groups.forEach(function (group) { %>
-                                            <button class="dropDownButton" onclick="addSamplesToGroup(this.value)"
-                                                value=<%=group.group_id %>>
-                                                <%= group.name %>
+                                    <div id="resultsPageGraphComponent2">
+                                        <div id="interactiveGraph">
+                                            <button type="button" id="centerGraph" onclick="centerCy()"
+                                                title="Center graph" class="btn btn-outline-dark btn-sm">
+                                                <i class="fas fa-expand"
+                                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
                                             </button>
-                                            <% }) %>
-                                                <button class="dropDownButton" onclick="addToGroup(this.value)"
-                                                    value="create">
-                                                    Create new group
-                                                </button>
+                                            <button type="button" id="downloadGraph" onclick="saveCy()"
+                                                title="Download current view" class="btn btn-outline-dark btn-sm">
+                                                <i class="fas fa-file-image"
+                                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+                                            </button>
+                                            <button type="button" id="zoomInGraph" onclick="zoomInCy()"
+                                                title="Zoom in on graph" class="btn btn-outline-dark btn-sm">
+                                                <i class="fa fa-search-plus"
+                                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+                                            </button>
+                                            <button type="button" id="zoomOutGraph" onclick="zoomOutCy()"
+                                                title="Zoom out on graph" class="btn btn-outline-dark btn-sm">
+                                                <i class="fa fa-search-minus"
+                                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+                                            </button>
+                                            <a href="#interactiveGraph" id="expandGraph" onclick="fullScreenCy()"
+                                                title="Make graph full screen" class="btn btn-outline-dark btn-sm">
+                                                <i class="fas fa-long-arrow-alt-up"
+                                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+                                            </a>
+                                            <button type="button" id="minimizeGraph" onclick="minimizeCy()"
+                                                title="Minimize graph to original size"
+                                                class="btn btn-outline-dark btn-sm">
+                                                <i class="fas fa-long-arrow-alt-down"
+                                                    style="font-size:20px; padding-left: 20px; padding-right: 20px;"></i>
+                                            </button>
+                                            <% if (userLoggedIn) { %>
+                                                <div class="dropdown">
+                                                    <button id="downloadButton" type="button" data-toggle="dropdown"
+                                                        aria-haspopup="true" aria-expanded="false">
+                                                        Add visible samples to Group
+                                                    </button>
+                                                    <div id="groupDropDownMenu" class="dropdown-menu"
+                                                        aria-labelledby="dropdownMenuButton">
+                                                        <% avail_groups.forEach(function (group) { %>
+                                                            <button class="dropDownButton"
+                                                                onclick="addSamplesToGroup(this.value)"
+                                                                value=<%=group.group_id %>>
+                                                                <%= group.name %>
+                                                            </button>
+                                                            <% }) %>
+                                                                <button class="dropDownButton"
+                                                                    onclick="addToGroup(this.value)" value="create">
+                                                                    Create new group
+                                                                </button>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                                        </div>
+                                        <div id="cyLegend">
+                                            <div class="legend" onclick="changeConnection('isolation_location', this)">
+                                                <div class="legendColorSquare" style="background-color: red;"></div>
+                                                <p id="locLegend" class="cyLegendText"> Same Location </p>
+                                                <div class="cyLegendSpacer"></div>
+                                            </div>
+
+                                            <div class="legend" onclick="changeConnection('species', this)">
+                                                <div class="legendColorSquare" style="background-color: teal;"></div>
+                                                <p id="seqLegend" class="cyLegendText"> Same Species</p>
+                                                <div class="cyLegendSpacer"></div>
+                                            </div>
+
+                                            <div class="legend" onclick="changeConnection('isolation_host', this)">
+                                                <div class="legendColorSquare" style="background-color: blue;"></div>
+                                                <p id="hostLegend" class="cyLegendText"> Same Host </p>
+                                                <div class="cyLegendSpacer"></div>
+                                            </div>
+
+                                            <div class="legend" onclick="changeConnection('sequence_type', this)">
+                                                <div class="legendColorSquare" style="background-color: green;"></div>
+                                                <p id="seqLegend" class="cyLegendText"> Same Sequence Type </p>
+                                                <div class="cyLegendSpacer"></div>
+                                            </div>
+
+                                            <br>
+
+                                            <div class="legend" onclick="changeConnection('isolation_source', this)">
+                                                <div class="legendColorSquare" style="background-color: orange;"></div>
+                                                <p id="isoLegend" class="cyLegendText"> Same Isolation Source </p>
+                                                <div class="cyLegendSpacer"></div>
+                                            </div>
+
+                                            <div class="legend" onclick="changeConnection('time_of_sampling', this)">
+                                                <div class="legendColorSquare" style="background-color: purple;"></div>
+                                                <p id="isoLegend" class="cyLegendText"> Same Sampling Time </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- close resultsPageGraphComponent2 -->
+
+                                    <div id="resultsPageGraphComponent3">
+                                        <div id="cy"></div>
+                                    </div>
+                                    <!-- close resultsPageGraphComponent3 -->
+
+                                    <div id="distanceErrorContainer">
+                                        <span id="distanceError"></span>
+                                        <!-- info sign -->
+                                        <span class="material-icons" id="distanceErrorInfo" data-toggle="tooltip"
+                                            data-placement="top">info</span>
+                                    </div>
+                                    <div id="resultsPageGraphComponent4" style="text-align: center;">
+                                        <div class="weightedDistanceSliders">
+                                            <p id="weighteddistnum">Minimum Connections = <span mono
+                                                    id="minCon">1</span></p>
+                                            <input type="range" min="1" max="5" value="1.00" class="slider"
+                                                id="cyMinConnections"
+                                                oninput="document.getElementById('minCon').innerHTML=this.value;updateCytoscape()"></input>
+                                        </div>
+
+                                        <div class="weightedDistanceSliders">
+
+                                            <p id="weighteddist2num">Maximum Weighted Distance = <span mono
+                                                    id="maxDist">1.00</span></p>
+                                            <input type="range" min="0" max="1" step="0.01" value="1.00" class="slider"
+                                                id="cyMaxDistance"></input>
+
+                                        </div>
+
+                                        <div class="weightedDistanceSliders">
+                                            <p id="weighteddist3num">Include If Distance Unavailable</p>
+                                            <input type="checkbox" id="cyIncludeNoDistance" checked="true"
+                                                onclick="updateCytoscape()"></input>
+                                        </div>
+
                                     </div>
                                 </div>
-                                <% } %>
-                        </div>
-                        <div id="cyLegend">
-                            <div class="legend" onclick="changeConnection('isolation_location', this)">
-                                <div class="legendColorSquare" style="background-color: red;"></div>
-                                <p id="locLegend" class="cyLegendText"> Same Location </p>
-                                <div class="cyLegendSpacer"></div>
-                            </div>
+                                <!-- close resultsPageGraphComponent4 -->
 
-                            <div class="legend" onclick="changeConnection('species', this)">
-                                <div class="legendColorSquare" style="background-color: teal;"></div>
-                                <p id="seqLegend" class="cyLegendText"> Same Species</p>
-                                <div class="cyLegendSpacer"></div>
-                            </div>
+                                <!-- close resultsPageResultComponents -->
+                                <div id="resultsPageGraphComponent5" style="text-align: center;">
 
-                            <div class="legend" onclick="changeConnection('isolation_host', this)">
-                                <div class="legendColorSquare" style="background-color: blue;"></div>
-                                <p id="hostLegend" class="cyLegendText"> Same Host </p>
-                                <div class="cyLegendSpacer"></div>
-                            </div>
+                                    <h3 style="text-align: center">Find My Friends</h3>
 
-                            <div class="legend" onclick="changeConnection('sequence_type', this)">
-                                <div class="legendColorSquare" style="background-color: green;"></div>
-                                <p id="seqLegend" class="cyLegendText"> Same Sequence Type </p>
-                                <div class="cyLegendSpacer"></div>
-                            </div>
+                                    <p>Discover Close Genomes Based On Distance</p>
 
-                            <br>
+                                    <div class="row">
+                                        <div class="col">
+                                            <% include ../snippets/rangedSliderGeneticDistance.ejs %>
+                                        </div>
+                                        <div class="col">
+                                            <div slider class="findMyFriendsFilter">
+                                                <p style="text-align:center">Adjust Mash/ANI</p>
+                                                <div class="weightingSlider">
+                                                    <Span><span mono id="mashWeight">0.00</span> Mash</Span>
+                                                    <input id="weightingInput" type="range" min="0" max="1"
+                                                        step="0.01" />
+                                                    <Span><span mono id="aniWeight">0.000</span> ANI</Span>
+                                                </div>
+                                            </div>
+                                        </div>
 
-                            <div class="legend" onclick="changeConnection('isolation_source', this)">
-                                <div class="legendColorSquare" style="background-color: orange;"></div>
-                                <p id="isoLegend" class="cyLegendText"> Same Isolation Source </p>
-                                <div class="cyLegendSpacer"></div>
-                            </div>
+                                    </div>
 
-                            <div class="legend" onclick="changeConnection('time_of_sampling', this)">
-                                <div class="legendColorSquare" style="background-color: purple;"></div>
-                                <p id="isoLegend" class="cyLegendText"> Same Sampling Time </p>
-                            </div>
-                        </div>
+                                    <form action='/result' method="get">
+                                        <div id="findMyFriendsCards"></div>
+                                    </form>
 
-                    </div>
-                    <!-- close resultsPageGraphComponent2 -->
-
-                    <div id="resultsPageGraphComponent3">
-                        <div id="cy"></div>
-                    </div>
-                    <!-- close resultsPageGraphComponent3 -->
-
-                        <div id="distanceErrorContainer">
-                            <span id="distanceError"></span>
-                            <!-- info sign -->
-                            <span class="material-icons" id="distanceErrorInfo" data-toggle="tooltip"
-                                data-placement="top">info</span>
-                        </div>
-                    <div id="resultsPageGraphComponent4" style="text-align: center;">
-                        <div class="weightedDistanceSliders">
-                            <p id="weighteddistnum">Minimum Connections = <span mono id="minCon">1</span></p>
-                            <input type="range" min="1" max="5" value="1.00" class="slider" id="cyMinConnections"
-                                oninput="document.getElementById('minCon').innerHTML=this.value;updateCytoscape()"></input>
-                        </div>
-
-                        <div class="weightedDistanceSliders">
-
-                            <p id="weighteddist2num">Maximum Weighted Distance = <span mono id="maxDist">1.00</span></p>
-                            <input type="range" min="0" max="1" step="0.01" value="1.00" class="slider"
-                                id="cyMaxDistance"></input>
-
-                        </div>
-
-                        <div class="weightedDistanceSliders">
-                            <p id="weighteddist3num">Include If Distance Unavailable</p>
-                            <input type="checkbox" id="cyIncludeNoDistance" checked="true"
-                                onclick="updateCytoscape()"></input>
-                        </div>
-
-                    </div>
-                </div>
-                <!-- close resultsPageGraphComponent4 -->
-
-                <!-- close resultsPageResultComponents -->
-                <div id="resultsPageGraphComponent5" style="text-align: center;">
-
-                    <h3 style="text-align: center">Find My Friends</h3>
-
-                    <p>Discover Close Genomes Based On Distance</p>
-
-                    <div class="row">
-                        <div class="col">
-                            <% include ../snippets/rangedSliderGeneticDistance.ejs %>
-                        </div>
-                        <div class="col">
-                            <div slider class="findMyFriendsFilter">
-                                <p style="text-align:center">Adjust Mash/ANI</p>
-                                <div class="weightingSlider">
-                                    <Span><span mono id="mashWeight">0.00</span> Mash</Span>
-                                    <input id="weightingInput" type="range" min="0" max="1" step="0.01" />
-                                    <Span><span mono id="aniWeight">0.000</span> ANI</Span>
                                 </div>
                             </div>
-                        </div>
-
-                    </div>
-
-                    <form action='/result' method="get">
-                        <div id="findMyFriendsCards"></div>
-                    </form>
-
-                </div>
-            </div>
-            <% include ../snippets/resultScripts.ejs %>
-                <!-- Scripts for downloading the sample information     -->
-                <% include ../snippets/saveCsvScript.ejs %>
-    </div>
+                            <% include ../snippets/resultScripts.ejs %>
+                                <!-- Scripts for downloading the sample information     -->
+                                <% include ../snippets/saveCsvScript.ejs %>
+        </div>

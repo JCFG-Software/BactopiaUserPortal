@@ -32,6 +32,7 @@
 
     groupCard.setAttribute('name', 'groupId');
     groupCard.setAttribute('value',  `${ group.group_id }`);
+    //console.log(group.group_id);
     groupCard.setAttribute('onclick',  "window.location.href='/viewGroup'");
     groupCard.setAttribute('type',  "submit");
     groupCard.setAttribute('class', 'groupCard')
@@ -44,7 +45,7 @@
                   <b>Last modified: </b>${ new Date(group.modified).toDateString() }<br>
                   <div class="groupCountTag">${ group.count}</div>`;
     groupCard.innerHTML = groupCardContent;
-    console.log(groupCard.outerHMTL);
+    //console.log(groupCard.outerHMTL);
 
     return groupCard;
   }
