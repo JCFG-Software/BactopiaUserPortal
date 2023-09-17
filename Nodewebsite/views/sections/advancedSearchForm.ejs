@@ -1,5 +1,5 @@
 <!--Main content of the advanced search page-->
-<div id="page-conatiner">
+<div id="page-container">
 
     <!--Information on the advanced search page-->
     <div id="informarion" style="margin: auto">
@@ -9,29 +9,79 @@
     </div>
 
     <!--Advanced Search form-->
-    <div id="advancedSearch"  style="margin-left: auto; margin-right: auto; width: 60%">
-        <form action='/advSearchResults' method="get">
+    <div id="advancedSearch"  style="margin-left: auto; margin-right: auto;">
+        <form action='/advSearchResults' 
+        method="get"
+        id="advSearchForm"
+        >
             <!--Name input (text)-->
             <div class="form-group">
                     <label for="speciesInput">Species</label>
                     <input type="text" class="form-control" name="species" id="speciesInput" placeholder="Species Name">
             </div>
-
             <div class="row">
-                <!--Gene Present input (text)-->
                 <div class="col">
                 <label for="sequenceInput">Sequence Type</label>
                 <input type="number" max="10000" class="form-control" name="sequence_type" id="sequenceInput" placeholder="Sequence Type">
                 </div>
-                <!--Gene Absent input (text)-->
                 <div class="col">
                     <label for="annotInput">Includes All Annotations (comma separated)</label>
                     <input type="text" class="form-control" name="annotations" id="annotInput" placeholder="a1 (, a2...)">
                 </div>
             </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                <label for="hostInput">Isolation Host</label>
+                <input type="text" class="form-control" name="isolation_host" id="hostInput" placeholder="e.g. Human">
+                </div>
+                <div class="col">
+                    <label for="annotInput">Isolation Source</label>
+                    <input type="text" class="form-control" name="isolation_source" id="sourceInput" placeholder="e.g. Wound">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col">
+                <label for="locationInput">Location</label>
+                <input type="text" class="form-control" name="isolation_location" id="locationInput" placeholder="e.g. USA">
+                </div>
+                <div class="col">
+                    <label for="timeInput">Isolation Time</label>
+                    <input type="text" class="form-control" name="time_of_sampling" id="timeInput" placeholder="e.g. NOV 2023">
+                </div>
+            </div>
 
             <!--Form submission button-->
-            <button type="submit" class="btn btn-dark" style="margin-top: 20px; width: 100px">Search</button>
+            <button class="btn btn-dark" onClick="validateForm()" style="margin-top: 20px; width: 100px">Search</button>
+            <p id="error" style="color: red; margin: 20px; height: 1em"></p>
         </form>
     </div>
+    <script>
+    /*
+        Ensure that at least one field is filled in before submitting the form 
+    */
+    function validateForm(){
+        const form = document.getElementById("advSearchForm");
+        const error = document.getElementById("error");
+        error.innerHTML = "";
+        // stop form submission
+        form.onsubmit = function(e){
+            e.preventDefault();
+        }
+        const elements = form.elements;
+        for (let i = 0; i < elements.length; i++){
+            if (elements[i].value != ""){
+                form.submit();
+                return true;
+            }
+        }
+        // If no fields are filled in, display error message
+        error.innerHTML = "Please fill in at least one field";
+        // Prevent form submission
+        return false;
+    }
+
+    </script>
+
 </div>
