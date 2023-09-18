@@ -50,6 +50,5 @@ function checkUserHasAccess(req, res, next) {
       });
 }
 
-const authenticateUser = [checkUserLoggedIn, checkUserHasAccess];
+module.exports = checkUserHasAccess;
 
-module.exports = authenticateUser;
