@@ -31,5 +31,5 @@ services:
       DB_USER: bactbook
       SAMPLES_DIR: /work
     volumes:
-      - "${SAMPLES:?Please set SAMPLES=<BACTOPIA_DIR> Before Running}:/work"
+      - "${SAMPLES_DIR:?Please export SAMPLES_DIR=<BACTOPIA_DIR> Before Running}:/work"
 
