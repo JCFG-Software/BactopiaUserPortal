@@ -51,7 +51,7 @@ router.post('/', function (req, res) {
     }).catch((err) => {
         console.log(err);
     });
-    sample = encodeURIComponent(sampleID);
+    const sample = encodeURIComponent(sampleID);
     res.redirect('/result?sampleSelection=' + sample);
 });
 
