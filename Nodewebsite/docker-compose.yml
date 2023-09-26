@@ -25,6 +25,8 @@ services:
     depends_on: 
       - db
     environment:
+      PORT: 3000
+      SECRET: "${SECRET-secret}"
       DB_HOST: db
       DB_DB: bactbook
       DB_PASS: password
