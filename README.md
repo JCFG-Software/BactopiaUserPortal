@@ -8,13 +8,23 @@ With this app, users are able to:
 - find similar genomes by shared information such as isolation sources and by genetic distance
 - favorite and tag samples by adding them to a group which can then be shared and viewed by other users
 - annotate groups and view generic statistics about each group
+## Docker
+If you don't want to mess around with dependencies, or just prefer containers for the easy setup and removal, try [Docker](https://docker.com).
+
+1. Install Docker
+2. Gather some bactopia analysis (available in Releases on the right)
+4. Clone this repo
+5. Set the environment variable `SAMPLES_DIR` as per [here](#2-environment-variables) (in either a `.env` file within `Nodewebsite` or directly in your shell)
+6. `cd` into `Nodewebsite` and run `docker-compose up`
+
+(note: other environment variables are optional, with defaults set in `docker-compose.yml`)
 
 ## Prerequisites
 - Node.js 
 - PostgresSQL v14
 - [Mash](https://github.com/marbl/Mash) for distance estimation features
 - Bactopia Output Files (V3.00)
-  - Old folder structure currently supported, recommended to download data from releases.
+  - Old folder structure currently supported, recommended to download data from releases page on the right.
 <details>
 <summary>Node.js</summary>
   
@@ -108,7 +118,7 @@ SAMPLES_DIR/
 
 ## Running BactBook
 With all prerequisites installed, there's just a couple more steps before you're on your way to exploring BactBook.
-1. Database Creation Scripts
+### 1. Database Creation Scripts
 
 With a Postgres database server created and running locally, the scripts can be executed from the command line:
 ```{bash}
@@ -116,7 +126,7 @@ cd Nodewebsite/sql
 psql {db_name} < bactopia_role.sql
 psql {db_name} < create_tables.sql
 ```
-2. Environment Variables
+### 2. Environment Variables
 
 Copy `template.env` and rename it to simply `.env`. Fill in all variables and save.
 
@@ -133,13 +143,13 @@ Copy `template.env` and rename it to simply `.env`. Fill in all variables and sa
 | DEBUG       | Used for turning on/off debug logs. If something isn't working as expected, this might help find the culprit. <br>`# Print out logs from files in the routes folder only`<br> `DEBUG=routes:*` <br> `# Print out logs from both routes and utils` <br> `DEBUG=utils:*,routes:*` |
 
 
-3. NPM Install
+### 3. NPM Install
 `cd` into `Nodewebsite/` and run:
 ```
 npm install
 ```
 After a few seconds, all the required packages should be installed and you're ready to run!
-4. Spin It Up
+### 4. Spin It Up
 Still inside `Nodewebsite/`, run:
 ```
 node app.js
