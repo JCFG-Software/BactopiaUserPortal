@@ -13,18 +13,18 @@ function getGatherData(runName) {
     // return as  { [key: string]: string }[]
     // probably only one row from what I can see, but leave room
     if (!runName || !process.env.SAMPLES_DIR) {
-        console.error(`runName or SAMPLES_DIR not set, received ${runName} and ${process.env.SAMPLES_DIR}`);
+        log(`runName or SAMPLES_DIR not set, received ${runName} and ${process.env.SAMPLES_DIR}`);
         return null;
     }
     const gatherFile = path.join(
         process.env.SAMPLES_DIR,
         runName,
-        'bactopia-main',
+        'main',
         'gather',
         runName + '-meta.tsv',
     );
     if (!fs.existsSync(gatherFile)) {
-        console.error(`Could not find gather file ${gatherFile}`);
+        log(`Could not find gather file ${gatherFile}`);
         return null;
     }
     const gatherData = fs.readFileSync(gatherFile, 'utf8');

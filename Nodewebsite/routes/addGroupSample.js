@@ -11,7 +11,7 @@ router.post('/', function (req, res) {
             .insert({
                 group_id: groupId,
                 sample_id: sampleId
-            })
+            }).onConflict(['group_id', 'sample_id']).ignore()
             .then( () => {
                     req.knex('groups')
                         .where({group_id: groupId})

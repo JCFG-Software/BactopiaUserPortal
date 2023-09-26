@@ -12,18 +12,18 @@ function getAssemblerData(runName) {
     // return as  { [key: string]: string }[]
     // probably only one row from what I can see, but leave room
     if (!runName || !process.env.SAMPLES_DIR) {
-        console.error(`runName or SAMPLES_DIR not set`);
+        log(`runName or SAMPLES_DIR not set`);
         return {};
     }
     const assemblerFile = path.join(
         process.env.SAMPLES_DIR,
         runName,
-        'bactopia-main',
+        'main',
         'assembler',
         runName + '.tsv',
     );
     if (!fs.existsSync(assemblerFile)) {
-        console.error(`Could not find assembler file ${assemblerFile}`);
+        log(`Could not find assembler file ${assemblerFile}`);
         return {};
     }
     const assemblerData = fs.readFileSync(assemblerFile, 'utf8');

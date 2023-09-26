@@ -1,0 +1,35 @@
+# docker compose for setting up:
+#  Requires environment variable SAMPLES to be set to the bactopia directory
+#   1. Postgres image
+#   2. NodeJs image
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: bactbook
+      POSTGRES_PORT: 5432
+    volumes:
+      - ./sql/bactopia_role.sql:/docker-entrypoint-initdb.d/01_bactopia_role.sql
+      - ./sql/create_tables.sql:/docker-entrypoint-initdb.d/02_create_tables.sql
+      - ./sql/populate_tables.sql:/docker-entrypoint-initdb.d/03_populate_tables.sql
+    ports:
+      - 5432:5432
+  web:
+    build: .
+    ports:
+      - 3000:3000
+    depends_on: 
+      - db
+    environment:
+      DB_HOST: db
+      DB_DB: bactbook
+      DB_PASS: password
+      DB_USER: bactbook
+      SAMPLES_DIR: /work
+    volumes:
+      - "${SAMPLES_DIR:?Please export SAMPLES_DIR=<BACTOPIA_DIR> Before Running}:/work"
+

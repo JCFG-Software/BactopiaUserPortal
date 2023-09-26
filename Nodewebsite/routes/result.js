@@ -27,58 +27,25 @@ router.get('/', async function(req, res) {
     req.session.prevSample = sampleName;
     req.session.favourited = false; // Assume that sample is not favorited before check
 
-    // Grab the sample's details from the filesystem
-    //      (*)         = Not implemented yet
-    //      (** REASON) = Not able to be implemented fully yet
-    //      (***)       = Doesn't seem relevant at all - clarify with client and team
-    //
-    // TAGS                 - RANDOM NUMBER     (*** - Doesn't seem to mean anything)
-    // isFavourited         - Bool              Working but colour of heart isnt changing
-    // Groups hasnt been implemented yet
-    // sample_metadata                          (* - Talk through this) 
-    // run_name    - string
-    // genome_size - int
-    // .. TODO: Work out what else constitutes metadata
-
-    // annotations          - Dict of strings   (* - util exists, need to implement)
-    // quality              - list of files     (* - think linking to the files is enough, see util) 
-    // sketcher             - Msh files         (** - Need to really think about what this one means and how to use)
-    // TODO: Bactopia-Tools Integration
-
-    // similar_genomes      - List of strings   (** - Need utils for doing this query, requires clarification on host etc.
-    // can do genetic distance and stuff with sketcher files I believe)
-    // mlst (sequence type) - int               (** - appears to require different bactopia setup)
-
-    /*
-        * If the user is logged in, check if the sample is favourited
-        * TODO: database operation
-    */
     if (userLoggedIn) {
         let value = req.session.userEmail;
         let email = decodeURIComponent(value);
-        // TODO: Work out how to do the whole database thing with these
         let fav_results = await req.knex.select('*').from('user_favorites').where({ email: email, sample_id: sampleName })
 
         if (fav_results.length > 0) {
-            req.session.favourited = true; //Its not picking this up
+            req.session.favourited = true;
         }
-
-        /*then((fav_results) => {
-            //console.log(`Results are: ${JSON.stringify(fav_results)}`);
-            if (fav_results.length > 0) {
-                req.session.favourited = true; //Its not picking this up
-            }
-        });*/
     }
     let getGroups = req.knex.select('group_id', 'name').from('groups').where({ email: '' });
     let sampleGroups;
+    let alreadyInGroups = [];
 
     if (userLoggedIn) {
-        let alreadyInGroups = req.knex.select('group_id').from('group_samples').where({ sample_id: sampleName });
+        alreadyInGroups = Array.from(req.knex.select('group_id').from('group_samples').where({ sample_id: sampleName }));
+        log(`Already in groups: ${alreadyInGroups}`);
         getGroups = req.knex.select('group_id', 'name')
             .from('groups')
             .where({ email: decodeURIComponent(req.session.userEmail) })
-            .whereNotIn('group_id', alreadyInGroups);
 
         sampleGroups =
             req.knex.select('groups.group_id', 'name')
@@ -117,11 +84,9 @@ router.get('/', async function(req, res) {
     const qc = getQualityControlData(sampleName);
     const annotations = getAnnotations(sampleName);
 
-    const metadatas = await req.knex.select('isolation_species', 'isolation_location', 'time_of_sampling', 'notes').from('metadata').where({sample_id: sampleName});
-    if (metadatas.length == 0) {
-        metadatas.push({isolation_species: '', isolation_location: '', time_of_sampling: '', notes: ''})
-    }
-    console.log(metadatas);
+    const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes', 'email', 'created').from('metadata')
+    .where({sample_id: sampleName}).orderBy('created', 'desc');
+    console.log(metadatas)
     // Tools - May or may not exist
     const mlst = getMLSTData(sampleName);
 
@@ -131,7 +96,7 @@ router.get('/', async function(req, res) {
 
             res.render('pages/result', {
                 summary: gather,
-            userMeta: metadatas[0],
+                userMeta: metadatas,
                 userLoggedIn: userLoggedIn,
                 sample_ID: sampleName,
                 isFavourited: req.session.favourited,
@@ -141,6 +106,7 @@ router.get('/', async function(req, res) {
                 mlst: mlst,
                 annotations: annotations,
                 avail_groups: groupsInfo,
+                in_groups: alreadyInGroups,
                 sample_groups: sampleGroups,
             });
         })

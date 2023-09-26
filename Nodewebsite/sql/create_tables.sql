@@ -89,12 +89,20 @@ ALTER TABLE public.group_sharing
 
 CREATE TABLE public.metadata
 (
+    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     sample_id text NOT NULL,
-    isolation_species text,
+    isolation_host text,
+    isolation_source text,
     isolation_location text,
     time_of_sampling text,
     notes text,
-    CONSTRAINT metadata_pkey PRIMARY KEY (sample_id)
+    created timestamp with time zone,
+    email text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT metadata_pkey PRIMARY KEY (id),
+    CONSTRAINT existing_users FOREIGN KEY (email)
+        REFERENCES public.registered_users (email) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 )
 WITH (
     OIDS = FALSE

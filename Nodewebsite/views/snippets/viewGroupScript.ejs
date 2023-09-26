@@ -25,37 +25,9 @@
        emptyGroupMessage.innerHTML = "No samples have been added to this group yet";
        return;
      }
-
-      groupSamples.forEach(function(sample) { // Throws error otherwise with undefined properties
-        if ( sample.st == undefined ) {
-          sample.st = "Unknown";
-        }
-        if ( sample.country == undefined ) {
-          sample.country = "Unknown";
-        }
-        if ( sample.strain == undefined ) {
-          sample.strain = "Unknown";
-        }
-        if ( sample.host == undefined ) {
-          sample.host = "Unknown";
-        }
-        if ( sample.isolation_source == undefined ) {
-          sample.isolation_source = "Unknown";
-        }
-      });
-
-
+     
       let orderBy = document.getElementById("orderBy").value; // Order samples by desired field
       groupSamples.sort(function(a,b) {
-        if (orderBy == "sequenceType") {
-          if (a.st < b.st) {
-            return -1;
-          }
-          if (a.st > b.st) {
-            return 1;
-          }
-          return 0;
-        }
         if (orderBy == "sampleId") {
           if (a.id < b.id) {
             return -1;
@@ -65,18 +37,22 @@
           }
           return 0;
         }
-        if (orderBy == "location") {
-          return a.country.localeCompare(b.country);
+        if (orderBy == "sequenceType") {
+          return a.sequenceType.localeCompare(b.sequenceType);
         }
-        if (orderBy == "strain") {
-          return a.strain.localeCompare(b.strain);
+        if (orderBy == "species") {
+          return a.species.localeCompare(b.species);
+        }
+        if (orderBy == "location") {
+          return a.location.localeCompare(b.location);
+        }
+        if (orderBy == "source") {
+          return a.source.localeCompare(b.source);
         }
         if (orderBy == "host") {
           return a.host.localeCompare(b.host);
         }
-        if (orderBy == "isolationSource") {
-          return a.isolation_source.localeCompare(b.isolation_source);
-        }
+
       });
 
      orderByAsc = document.getElementById("toggleOrder"); // Apply reverse order if desired
@@ -99,9 +75,12 @@
        let info = document.createElement("p");
 
        let display = `<div class="genomeCardSampleId"><h4>${groupSample.id}</h4></div>
-       <b>Sequence Type: </b>${groupSample.sequenceType}<br>
+        <b>Sequence Type: </b>${groupSample.sequenceType}<br>
        <b>Species: </b>${groupSample.species}<br>
-       <b>Length: </b>${groupSample.length}<br>`
+       <b>Host: </b>${groupSample.host}<br>
+       <b>Source: </b>${groupSample.source}<br>
+       <b>Location: </b>${groupSample.location}<br>`
+
 
        info.innerHTML = display;
        newCard.innerHTML = info.outerHTML;
@@ -164,7 +143,7 @@
     }
 
     // Reformat labels
-    labelPrefixes = ["Sequence Types", "Locations", "Strains","Hosts", "Isolation Sources"];
+    labelPrefixes = ["Sequence Type", "Species", "Hosts", "Sources","Locations"];
     for (l=0; l < labels.length; l++) {
       labels[l] = `${labelPrefixes[l]}\n${maxes[l]}% ${labels[l]}`;
     }
@@ -201,21 +180,20 @@
     let groupSamples =  <%- JSON.stringify(samples) %>;
 
     let sequenceTypes = {};
-    let locations = {};
-    let strains = {};
+    let species = {};
     let hosts = {};
-    let isolationSources = {};
+    let sources = {};
+    let locations = {};
 
     groupSamples.forEach(function(sample) {
-      sequenceTypes[sample.st] = increaseCount(sequenceTypes[sample.st]);
-      locations[sample.country] = increaseCount( locations[sample.country]);
-      strains[sample.strain] = increaseCount(strains[sample.strain]);
+      sequenceTypes[sample.sequenceType] = increaseCount(sequenceTypes[sample.sequenceType]);
+      species[sample.species] = increaseCount(species[sample.species]);
+      locations[sample.location] = increaseCount( locations[sample.location]);
+      sources[sample.source] = increaseCount(sources[sample.source]);
       hosts[sample.host] = increaseCount(hosts[sample.host]);
-      isolationSources[sample.isolation_source] = increaseCount(isolationSources[sample.isolation_source]);
     });
-
-    canvases = [["sequenceTypeBar", sequenceTypes, "Sequence Types"], ["locationBar", locations, "Locations"],
-    ["strainBar", strains, "Strains"], ["hostBar", hosts, "Hosts"], ["isolationSourceBar", isolationSources, "Isolation Sources"]];
+    canvases = [["sequenceTypeBar",sequenceTypes, "Sequence Types"], ["speciesBar", species, "Species"], ["hostBar", hosts, "Hosts"], 
+    ["sourceBar", sources, "Sources"], ["locationBar", locations, "Locations"]]
 
     canvases.forEach(function(canvas) {
       //console.log(canvas);
@@ -226,7 +204,7 @@
     });
 
     // Create radar chart
-    chartInfo = getRadarLabelsData([sequenceTypes, locations, strains, hosts, isolationSources], Object.keys(groupSamples).length);
+    chartInfo = getRadarLabelsData([sequenceTypes, species, hosts, sources, locations], Object.keys(groupSamples).length);
     createRadarChart("aggregatedRadarGraph", chartInfo[0], chartInfo[1]);
 
   }
@@ -889,7 +867,7 @@ function removeGenomeSamples() {
 
   function loadUnpubliciseGroup() {
     let container = document.getElementById("makeGroupPrivate");
-    container.innerHTML = '<p id="unpubliciseMessage">You have editting rights as a collaborator. Would you like to change this group back to private?</p><Button id="makePrivateButton" onclick="unpubliciseGroup()">Yes</Button>';
+    container.innerHTML = '<p id="unpubliciseMessage">You have editing rights as a collaborator. Would you like to change this group back to private?</p><Button id="makePrivateButton" onclick="unpubliciseGroup()">Yes</Button>';
   }
 
   function loadEdittingBars() {

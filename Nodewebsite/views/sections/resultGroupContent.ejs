@@ -36,10 +36,10 @@
 
     <div id="barGraphsSection">
       <canvas class="barGraph" id="sequenceTypeBar"></canvas>
-      <canvas class="barGraph" id="locationBar"></canvas>
-      <canvas class="barGraph" id="strainBar"></canvas>
+      <canvas class="barGraph" id="speciesBar"></canvas>
       <canvas class="barGraph" id="hostBar"></canvas>
-      <canvas class="barGraph" id="isolationSourceBar"></canvas>
+      <canvas class="barGraph" id="sourceBar"></canvas>
+      <canvas class="barGraph" id="locationBar"></canvas>
     </div>
 
     <!-- Display genome cards -->
@@ -53,10 +53,10 @@
         <select name="orderBy" id="orderBy" onchange="updateCards()">
         <option value="sampleId">Sample ID</option>
         <option value="sequenceType">Sequence Type</option>
-        <option value="location">Location</option>
-        <option value="strain">Strain</option>
+        <option value="species">Species</option>
         <option value="host">Host</option>
-        <option value="isolationSource">Isolation Source</option>
+        <option value="source">Source</option>
+        <option value="location">Location</option>
         </select>
 
         Ascending

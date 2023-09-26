@@ -6,6 +6,20 @@ button:focus {
   outline: none;
 }
 
+#distanceErrorContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1em;
+}
+
+#distanceErrorContainer>span {
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+}
+
+
 #page-container {
   width: 70%;
   margin: 0 auto;
@@ -70,10 +84,17 @@ hr.divider {
 
 .resultsPageTopComponent {
   margin-top: 3em;
+  text-align: center;
 }
 
 #resultsPageGraphComponents {
+    display:flex;
+    flex-direction:column;
     margin: 0 auto;
+    border-top: 0.5px solid silver;
+    border-left: 0.5px solid silver;
+    border-right: 0.5px solid silver;
+    border-bottom: 0.5px solid silver;
 }
 
 
@@ -91,37 +112,41 @@ hr.divider {
 #resultsPageGraphComponent2 {
     width: 100%;
     height: auto;
-    border-left: 0.5px solid silver;
-    border-right: 0.5px solid silver;
 }
 
 #resultsPageGraphComponent3 {
     width: 100%;
     height: 400px;
-    border-left: 0.5px solid silver;
-    border-right: 0.5px solid silver;
+    flex-grow: 1;
 }
 
 #resultsPageGraphComponent4 {
+    display:flex;
     width: 100%;
     padding-bottom: 10px;
     padding-top: 10px;
     margin: auto;
-    border-left: 0.5px solid silver;
-    border-right: 0.5px solid silver;
-    border-bottom: 0.5px solid silver;
 }
 
 #resultsPageGraphComponent5 {
     margin-top: 2em;
+    padding: 0.5em;
     width: 100%;
+}
+
+/* monospace */
+[mono] {
+    font-family: monospace
 }
 
 .weightedDistanceSliders {
     padding-left: 4px;
     padding-right: 4px;
-    width: 50%;
     margin: auto;
+}
+
+.weightedDistanceSliders>input {
+    width: 60%; 
 }
 
 #displayDescription {
@@ -229,6 +254,14 @@ button.tablinks {
     width: 100%;
 }
 
+.summaryTable{
+    margin: 0 auto;
+}
+/* remove table padding */
+.summaryTable>tbody>tr>td {
+    padding: 2px 10px;
+}
+
 td, th {
     border: 1px solid #dddddd;
     text-align: left;
@@ -264,6 +297,13 @@ div {
 
 .legend:hover {
     cursor: pointer;
+}
+
+.legend.legend-disabled {
+    opacity: 0.4;
+}
+.legend.legend-disabled > p {
+    text-decoration: line-through;
 }
 
 a {
@@ -389,25 +429,31 @@ a {
     width: 10px;
 }
 
-.popupS-button-ok.popUpButtonCSS {
-    border: 0.5px solid silver;
-    border-radius: 5px;
-    height: 30px;
-    background-color: #f1f1f1;
-    width: 50%;
-    margin-top: 5px;
-}
-
-.popupS-button-cancel.popUpButtonCSS {
-    border: 0.5px solid silver;
-    border-radius: 5px;
-    height: 30px;
-    background-color: #f1f1f1;
-    width: 50%;
-    margin-top: 5px;
+/* 
+ * Remove space between paras
+ */
+.popup>p{
+    margin:5px auto;
 }
 
 
+/* Make buttons all same height */
+.popupS-buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popUpButtonCSS {
+    border: 0.5px solid silver;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+    width: 40%;
+    height: 40px;
+    margin-top: 5px;
+    margin-left: 5%;
+}
 
 .typeahead, .tt-query, .tt-hint {
     border: 2px solid #CCCCCC;
@@ -483,7 +529,6 @@ a {
 /* Genetic Distance Slider */
 [slider] {
   position: relative;
-  height: 14px;
   border-radius: 10px;
   text-align: left;
   margin: 45px 0 10px 0;
@@ -656,6 +701,60 @@ div[slider] > input[type=range]::-ms-tooltip {
   opacity: 1;
 }
 
+.weightingSlider{
+    width:100%;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* Make the weighting range input look the same as the other one (slider) */
+#weightingInput {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    width: 15rem;
+    opacity: 1;
+    top: auto;
+    flex-grow: 1;
+    padding: 0px 20px;
+}
+
+#weightingInput::-webkit-slider-runnable-track {
+  background: #053a5f;
+  height: 14px;
+  border-radius: 14px;
+  background-color: #1ABC9C;
+}
+#weightingInput::-moz-range-track {
+  background: #053a5f;
+  height: 0.5rem;
+}
+
+#weightingInput::-webkit-slider-thumb {
+   -webkit-appearance: none; /* Override default look */
+   appearance: none;
+   margin-top: -7px; /* Centers thumb on the track */
+   border-radius: 100%;
+   height: 28px;
+   width: 28px;
+   cursor: pointer;
+   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+   background-color: #FFF;
+   border-radius: 50%;
+   outline: none;
+}
+
+#weightingInput::-moz-range-thumb {
+    border: none; /*Removes extra border that FF applies*/
+    border-radius: 0; /*Removes default border-radius that FF applies*/
+    background-color: #5cd5eb;
+    height: 2rem;
+    width: 1rem;
+}
+
 /* Toggle Button */
 .switch {
   position: relative;
@@ -762,7 +861,15 @@ input:checked + .toggle:before {
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
-  margin-top: 2em;
+  margin-top: 4em;
+}
+
+/* remove table outlines */
+.genomeCardSampleMetadata>table, .genomeCardSampleMetadata>table>tbody>tr>td {
+    border-collapse: collapse;
+    border: none;
+    margin: 0;
+    padding: 2px;
 }
 
 .genomeCard:hover {
@@ -799,7 +906,8 @@ input:checked + .toggle:before {
     border-radius: 15px;
     border: 1px solid #f3f3f3;
     float: left;
-    width: 22%;
+    width: 25%;
+    min-width:200px;
     padding: .5em;
     padding-left: .8em;
     padding-right: .8em;

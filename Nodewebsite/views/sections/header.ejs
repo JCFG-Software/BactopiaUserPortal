@@ -21,16 +21,13 @@
         <form class="form-inline" action='/searchResults' method="get" >
           <!--Search form dropdown-->
           <select id="options" name="category" style="border: 0.5px solid gray; margin-right: 1px;" class="form-control form-control-sm">
-            <option <%= locals.category=="annotations" ? "selected" : "" %> value="annotations">Annotations</option>
             <option <%= locals.category=="name" ? "selected" : "" %> value="name">Run Name</option>
+            <option <%= locals.category=="annotations" ? "selected" : "" %> value="annotations">Annotations</option>
             <option <%= locals.category=="sequence_type" ? "selected" : "" %> value="sequence_type">Sequence Type (MLST)</option>
             <option <%= locals.category=="species" ? "selected" : "" %> value="species">Species</option>
-            <% /* %>
-            <option <%= locals.category=="strain" ? "selected" : "" %> value="Strain Name">Strain Name</option>
-            <option <%= locals.category=="host" ? "selected" : "" %> value="Host">Host</option>
-            <option <%= locals.category=="source" ? "selected" : "" %> value="Source">Isolation Source</option>
-            <option <%= locals.category=="sample" ? "selected" : "" %> value="Sample">Sample ID</option>
-            <% */ %>
+            <option <%= locals.category=="isolation_host" ? "selected" : "" %> value="isolation_host">Isolation Host</option>
+            <option <%= locals.category=="isolation_source" ? "selected" : "" %> value="isolation_source">Isolation Source</option>
+            <option <%= locals.category=="isolation_location" ? "selected" : "" %> value="isolation_location">Sample Location</option>
           </select>
           <!--Search form text input-->
           <div class="input-group input-group-sm mb-3" style="margin-top: 16px; width: 450px;">
@@ -51,9 +48,12 @@
         <li class="nav-item">
           <a class="nav-link btn btn-sm btn-outline-dark" style="margin-left: 2px; margin-right: 2px; color: #468e94;" href="/advancedSearch">Advanced Search</a>
         </li>
+      <!--Link to update metadata if logged in-->
+      <% if (userLoggedIn) { %>
       <li class="nav-item">
-        <a class="nav-link btn btn-sm btn-outline-dark" style="margin-left: 2px; margin-right: 2px; color: #468e94;" href="/addMetadata">Add Metadata</a>
+        <a class="nav-link btn btn-sm btn-outline-dark" style="margin-left: 2px; margin-right: 2px; color: #468e94;" href="/addMetadata">Update Metadata</a>
       </li>
+      <% } %>
         <!--Link to help/tutorial page-->
         <li class="nav-item">
           <a class="nav-link btn btn-sm btn-outline-dark" href="/tutorials"  style="margin-left: 2px; margin-right: 2px; color: #468e94;">Help/Tutorial</a>

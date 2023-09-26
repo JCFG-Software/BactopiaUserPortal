@@ -20,8 +20,10 @@ async function changeSelectedSample(selection){
     var data = await response.json();
 
     // Populate the metadata fields with the returned data
-    // isolation species
-    document.getElementById("isolationSpecies").value = data.isolation_species;
+    // isolation host
+    document.getElementById("isolationHost").value = data.isolation_host;
+    // isolation source
+    document.getElementById("isolationSource").value = data.isolation_source;
     // isolation location
     document.getElementById("isolationLocation").value = data.isolation_location;
     // time of sampling

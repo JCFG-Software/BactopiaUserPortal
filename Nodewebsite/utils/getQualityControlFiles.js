@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const log = require("debug")("utils:getQualityControl");
 
 /**
  * Get names of quality control files for a specific sample
@@ -12,12 +13,12 @@ function getQualityControl(runName) {
     // so just return the names and paths of files in the QC directory
     // return as { [key: string]: string }[]
     if (!runName || !process.env.SAMPLES_DIR) {
-        console.error(`runName or SAMPLES_DIR not set`);
+        log(`runName or SAMPLES_DIR not set`);
         return {};
     }
     const qcDir = path.join(process.env.SAMPLES_DIR, runName, 'bactopia-main', 'qc', 'summary');
     if (!fs.existsSync(qcDir)) {
-        console.error(`Could not find QC directory ${qcDir}`);
+        log(`Could not find QC directory ${qcDir}`);
         return {};
     }
     const qcFiles = fs.readdirSync(qcDir);

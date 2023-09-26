@@ -10,7 +10,7 @@
 
      function downloadRadarGraph(){
        let base64Image = document.getElementById("aggregatedRadarGraph").toDataURL("image/jpg");
-       saveImageAs(base64Image,  `StaphBook- ${<%- JSON.stringify(groupInfo.name) %>} Radar.png`);
+       saveImageAs(base64Image,  `BactBook- ${<%- JSON.stringify(groupInfo.name) %>} Radar.png`);
      }
 
      function downloadBarGraphs(){
@@ -20,7 +20,7 @@
        for (var i = 0; i < barGraphs.length; i++) {
          let base64Image = barGraphs[i].toDataURL("image/jpg");
          let name = barGraphs[i].id;
-         saveImageAs(base64Image,  `StaphBook- ${<%- JSON.stringify(groupInfo.name) %>} ${name}.png`);
+         saveImageAs(base64Image,  `Bactbook- ${<%- JSON.stringify(groupInfo.name) %>} ${name}.png`);
        }
 
      }
@@ -39,7 +39,7 @@
 
        let groupName = ["Name", `${<%- JSON.stringify(groupInfo.name) %>}`];
        let groupDescription = ["Description", `${<%- JSON.stringify(groupInfo.description) %>}`];
-       let headers = ["Sample Id", "Sequence Type", "Location", "Strain", "Host", "Isolation Source"];
+       let headers = ["Sample Id", "Species", "Host", "Source", "Location"];
 
        let master_information = [];
        master_information.push(groupName);
@@ -47,34 +47,17 @@
        master_information.push(headers);
 
         groupSamples.forEach(function(sample) {
-          if ( sample.st == undefined ) {
-            sample.st = "Unknown";
-          }
-          if ( sample.country == undefined ) {
-            sample.country = "Unknown";
-          }
-          if ( sample.strain == undefined ) {
-            sample.strain = "Unknown";
-          }
-          if ( sample.host == undefined ) {
-            sample.host = "Unknown";
-          }
-          if ( sample.isolation_source == undefined ) {
-            sample.isolation_source = "Unknown";
-          }
-
           let sampleRow = [];
           sampleRow.push(sample.id);
-          sampleRow.push(sample.st);
-          sampleRow.push(sample.country);
-          sampleRow.push(sample.strain);
+          sampleRow.push(sample.species);
           sampleRow.push(sample.host);
-          sampleRow.push(sample.isolation_source);
+          sampleRow.push(sample.source);
+          sampleRow.push(sample.location);
           master_information.push(sampleRow);
         });
 
         let csvContent = "data:text/csv;charset=utf-8," + master_information.map(e => e.join(",")).join("\n");
-        saveCsvAs(csvContent, `StaphBook- ${<%- JSON.stringify(groupInfo.name) %>} Samples Key Metadata.png`);
+        saveCsvAs(csvContent, `BactBook- ${<%- JSON.stringify(groupInfo.name) %>} Samples Key Metadata.png`);
 
      }
 
@@ -83,7 +66,7 @@
        let encodedUri = encodeURI(csvContent);
        let link = document.createElement("a");
        link.setAttribute("href", encodedUri);
-       link.setAttribute("download", `StaphBook-Sample ${<%- JSON.stringify(groupInfo.name) %>} Metadata.csv`);
+       link.setAttribute("download", `Bactbook-Sample ${<%- JSON.stringify(groupInfo.name) %>} Metadata.csv`);
        document.body.appendChild(link); // for Firefox
        link.click();
      }

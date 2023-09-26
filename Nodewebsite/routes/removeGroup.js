@@ -21,7 +21,6 @@ router.post('/', function (req, res) {
       return;
     });
   return;
-  res.status(401).json({"message": "permissions error - user not logged in"})
 })
 
 module.exports = router;

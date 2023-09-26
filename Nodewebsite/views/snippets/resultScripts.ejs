@@ -51,19 +51,21 @@
 
 
     function addSamplesToGroup(group_id){
+        // get all elements in the collection
+        let collection = cy.elements();
         collection.forEach((ele) => {
             if(ele.isNode() && ele.inside()){
                 addSampleToGroup(group_id, ele.id());
             }
         });
-        addSampleToGroup(group_id, sampleIdentity);
+        addSampleToGroup(group_id, sampleIdentity, redirect=true);
     }
 
     function addToGroup(group_id){
         addSampleToGroup(group_id, sampleIdentity);
     }
 
-    function addSampleToGroup(group_id, sample_id){
+    function addSampleToGroup(group_id, sample_id, redirect=false){
         //let group_id = document.getElementById('groups-list').value;
         let baseUrl = window.location.origin;
         let url = `${baseUrl}/addGroupSample`;
@@ -86,7 +88,11 @@
         })
             .then(response => {
                 if (response.status === 200 && sample_id === sampleIdentity) {
-                    location.reload(true);
+                    if(redirect){
+                        window.location.href = `${baseUrl}/viewGroup?groupId=${group_id}`;
+                    }else{
+                        location.reload(true);
+                    }
                 }
             })
             .catch(error => {
@@ -142,6 +148,51 @@
         });
       }
 
-
-
+    function viewMetaHistory(){
+    // On click, create a popup that shows the history of the metadata in the database
+    //create a popup card
+        popupS.confirm(
+            {
+                content: `<div class="popup">
+                        <h3 style="margin:0 auto">Metadata history</h3>
+                        <table style="width:100%; margin-top:10px">
+                            <thead>
+                                <tr>
+                                    <td>User</td>
+                                    <td>Time</td>
+                                    <td>Isolation Host</td>
+                                    <td>Isolation Source</td>
+                                    <td>Isolation Location</td>
+                                    <td>Time of Sample</td>
+                                    <td>Notes</td>
+                                </tr>
+                            </thead>
+                            <tbody id="TableBody">
+                                <% for (var i = 0; i < userMeta.length; i++) { %>
+                                    <tr>
+                                        <td><%= userMeta[i].email %></td>
+                                        <td><%= userMeta[i].created %></td>
+                                        <td><%= userMeta[i].isolation_host %></td>
+                                        <td><%= userMeta[i].isolation_source %></td>
+                                        <td><%= userMeta[i].isolation_location %></td>
+                                        <td><%= userMeta[i].time_of_sampling %></td>
+                                        <td><%= userMeta[i].notes %></td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>`,
+                labelOk: "Close",
+                onSubmit: function () {
+                    return true;
+                },
+                onCancel: function () {
+                    return true;
+                },
+                onClose: function () {
+                    return true;
+                }
+            }
+        );
+    }
 </script>

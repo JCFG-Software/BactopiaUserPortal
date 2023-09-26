@@ -28,23 +28,18 @@
     </div>
 
     <!--Recommended genomes pill list-->
-	
-	
-	
-	
-    <div class="tab-pane fade" id="pills-recommended" role="tabpanel" aria-labelledby="pills-recommended-tab">
+	    <div class="tab-pane fade" id="pills-recommended" role="tabpanel" aria-labelledby="pills-recommended-tab">
       <% if (suggested.length > 0) { %>
 
       <form action='/result' method="get">
         <% suggested.forEach(function (result_sugs) { %>
 
-        <button type="submit" name="sampleSelection" value="<%= result_sugs.sample_id %>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
-          Sample: <%= result_sugs.sample_id %>,
-          Sequence Type: <%= result_sugs.st %>,
-          Location: <%= result_sugs.country %>,
-          Strain: <%= result_sugs.strain %>,
-          Host: <%= result_sugs.host %>,
-          Isolation Source: <%= result_sugs.isolation_source %>
+        <button type="submit" name="sampleSelection" value="<%= result_sugs.sample %>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
+          Run:     <%= result_sugs.sample %><br>
+          Species: <%= result_sugs.species %><br>
+          Host:    <%= result_sugs.host %><br>
+          Source: <%= result_sugs.source %><br>
+          Location: <%= result_sugs.location %>
           <% }) %>
 
         </button>
@@ -67,9 +62,11 @@
         <% favorites.forEach(function (result_favs) { %>
 
         <button type="submit" name="sampleSelection" value="<%= result_favs.sample %>" onclick="window.location.href='/result'" class="list-group-item list-group-item-action list-group-item-light" style="color: #0a0a0a">
-          Run:     <%= result_favs.sample %>,<br>
-          Species: <%= result_favs.species %>,<br>
-          Size:    <%= result_favs.genome_size %>
+          Run:     <%= result_favs.sample %><br>
+          Species: <%= result_favs.species %><br>
+          Host:    <%= result_favs.host %><br>
+          Source: <%= result_favs.source %><br>
+          Location: <%= result_favs.location %>
           <% }) %>
         </button>
       </form>

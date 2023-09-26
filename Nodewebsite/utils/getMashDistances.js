@@ -16,21 +16,27 @@ async function getMashDistances(sampleName, kmers = 31) {
     const command = OS == 'win32' ? 'wsl mash' : 'mash';
     const dir_prefix = OS == 'win32' ? `/mnt/${process.env?.SAMPLES_DRIVE || 'c'}` : '';
     const allSamples = getAllSampleNames();
+    let thisSamplePath =`${process.env.SAMPLES_DIR}/${sampleName}/main/sketcher/${sampleName}-k${kmers}.msh` 
+    if(allSamples.length < 2 || !fs.existsSync(thisSamplePath)){
+        return {};
+    }
+    thisSamplePath = `${dir_prefix}${thisSamplePath}`;
     // remove this sample from the list
     allSamples.splice(allSamples.indexOf(sampleName), 1);
-    let mashPaths = allSamples.map((sample) => `${process.env.SAMPLES_DIR}/${sample}/bactopia-main/sketcher/${sample}-k${kmers}.msh`);
-
+    let mashPaths = allSamples.map((sample) => `${process.env.SAMPLES_DIR}/${sample}/main/sketcher/${sample}-k${kmers}.msh`);
     // double check files exist, remove if not
-    mashPaths.forEach((path) => {
-        if (!fs.existsSync(path)) {
-            mashPaths.splice(mashPaths.indexOf(path), 1);
+    for(let i = 0; i < mashPaths.length; i++){
+        const path = mashPaths[i];
+        if(!fs.existsSync(path)){
+            mashPaths.splice(i, 1);
+            i--;
             log(`File ${path} does not exist, removing from mashPaths`);
         }
-    });
+    }
     // add in dir prefix if on windows
     mashPaths = mashPaths.map(p => `${dir_prefix}${p}`)
     // place this sample at the front of the array
-    mashPaths.unshift(`${dir_prefix}${process.env.SAMPLES_DIR}/${sampleName}/bactopia-main/sketcher/${sampleName}-k${kmers}.msh`);
+    mashPaths.unshift(thisSamplePath);
 
     const distances = {};
 

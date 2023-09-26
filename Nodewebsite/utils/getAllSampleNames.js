@@ -13,9 +13,9 @@ function getAllSampleNames() {
     }
     let sample_names = [];
     try {
-        // don't include dotfiles
+        // don't include dotfiles or bactopia-runs directory
         sample_names = fs.readdirSync(samples_dir, { withFileTypes: true })
-            .filter((dirent) => dirent.isDirectory() && !dirent.name.startsWith('.'))
+            .filter((dirent) => dirent.isDirectory() && !dirent.name.startsWith('.') && dirent.name !== 'bactopia-runs')
             .map((dirent) => dirent.name);
     } catch {
         console.error(`Could not read directory ${samples_dir}`);

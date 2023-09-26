@@ -12,7 +12,7 @@ function getMLST(runName){
     const mlstFile = path.join(
         process.env.SAMPLES_DIR,
         runName,
-        'bactopia-tools',
+        'tools',
         'mlst',
         runName + '.tsv',
     );
