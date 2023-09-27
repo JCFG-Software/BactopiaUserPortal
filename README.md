@@ -16,8 +16,13 @@ If you don't want to mess around with dependencies, or just prefer containers fo
 4. Clone this repo
 5. Set the environment variable `SAMPLES_DIR` as per [here](#2-environment-variables) (in either a `.env` file within `Nodewebsite` or directly in your shell)
 6. `cd` into `Nodewebsite` and run `docker-compose up`
+7. That's it! Go to http://localhost:3000 and you should be greeted with pre-populated samples
 
-(note: other environment variables are optional, with defaults set in `docker-compose.yml`)
+notes: 
+- other environment variables are optional, check out `docker-compose.yml` and [here](#2-environment-variables) to customise (or opt-out of prefilling the database)
+- If using the sample data provided, samples are real, but any prefilled metadata is completely made up
+- You can log in with the example accounts example1@mail.com or example2@mail.com to check out the sharing and group features (password: "password" for both)
+
 
 ## Prerequisites
 - Node.js 
