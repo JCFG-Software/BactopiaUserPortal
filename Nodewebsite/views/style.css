@@ -6,6 +6,11 @@ button:focus {
   outline: none;
 }
 
+#loginError {
+    color: red;
+    text-align: center;
+}
+
 #distanceErrorContainer{
     display: flex;
     flex-direction: row;

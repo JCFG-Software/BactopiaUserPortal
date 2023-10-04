@@ -1,71 +1,81 @@
 <div id="userLoginForm">
-  <h1 style="text-align: center;">
-    Login to Your Account
-  </h1>
-  <p style="text-align: center; margin-bottom: 30px;"> Please enter your registered email address and password, then click submit.</p>  
-  
-  <% if (creationSuccess) { %>
-    <script>alert("User account successfully created!");</script>
-  <% } %>
-    
-  <% if (userNotRegistered) { %>
-    <script>alert("User login unsuccessful, please try again.");</script>
-  <% } %> 
-    
-    
-  <form class="needs-validation" method="POST" novalidate="">
-    <!--Email Adress input (email)-->
-      <div class="form-group">
-        <label for="validationEmail">Email</label>
-        <input type="text" class="form-control" id="validationEmail" name="email" placeholder="example@example.com" required="">
-          <div class="invalid-feedback">
-            Please enter a valid email address.
-          </div>
+    <h1 style="text-align: center;">
+        Login to Your Account
+    </h1>
+    <p style="text-align: center; margin-bottom: 30px;"> Please enter your registered email address and password, then
+        click submit.</p>
+
+    <form class="needs-validation" method="POST" novalidate="">
+        <!--Email Adress input (email)-->
+        <div class="form-group">
+            <label for="validationEmail">Email</label>
+            <input type="email" class="form-control" id="validationEmail" name="email" placeholder="example@example.com"
+                required="">
+            <div class="invalid-feedback">
+                Please enter a valid email address.
+            </div>
         </div>
-    <!--Password input (password)-->
-    <div class="form-group">
-      <label for="validationPassword">Password</label>
-      <input type="password" class="form-control" id="validationPassword" name="password" placeholder="Password" required="">
-        <div class="invalid-feedback">
-          Please enter a password.
+        <!--Password input (password)-->
+        <div class="form-group">
+            <label for="validationPassword">Password</label>
+            <input type="password" class="form-control" id="validationPassword" name="password" placeholder="Password"
+                required="">
+            <div class="invalid-feedback">
+                Please enter a password.
+            </div>
         </div>
-      </div>
-    <div class="loginCenterText">
-      <!--Login form submission-->
-      <button type="submit" class="btn btn-dark" style="margin-top: 10px; width: 30%;">Log in</button>
-    </div>
-  </form>
-    
+        <p id="loginError"></p>
+        <div class="loginCenterText">
+            <!--Login form submission-->
+            <button type="submit" class="btn btn-dark" style="margin-top: 10px; width: 30%;">Log
+                in</button>
+        </div>
+    </form>
+
     <script>
-      //JavaScript for disabling form submissions if there are invalid fields
-      (function() {
-      'use strict';
-      window.addEventListener('load', function() {
-      // Fetch all the forms we want to apply custom Bootstrap validation styles to
-      var forms = document.getElementsByClassName('needs-validation');
-      // Loop over them and prevent submission
-      var validation = Array.prototype.filter.call(forms, function(form) {
-      form.addEventListener('submit', function(event) {
-      if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-      }
-      form.classList.add('was-validated');
-      }, false);
-      });
-      }, false);
-      })();
+        //JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
     </script>
 
-  <!--Link to Sign Up Page page-->
-  <div class="form-footer" style="margin-top: 15px;">
-    <div class="loginCenterText">
-      <p>
-        If you don't already have a BactBook account you can <a style="color: #468e94" href="/createAccount">
-          <u>Register here</u>
-        </a>.
-      </p>
+    <!--Link to Sign Up Page page-->
+    <div class="form-footer" style="margin-top: 15px;">
+        <div class="loginCenterText">
+            <p>
+                If you don't already have a BactBook account you can <a style="color: #468e94" href="/createAccount">
+                    <u>Register here</u>
+                </a>.
+            </p>
+        </div>
     </div>
-  </div>
-    
-  </div>
+
+    <% if (userNotRegistered) { %>
+        <script>
+            document.getElementById("loginError").innerHTML = "Email address or password incorrect";
+            document.getElementById("validationEmail").addEventListener("input", function () {
+                document.getElementById("loginError").innerHTML = "";
+            });
+            document.getElementById("validationPassword").addEventListener("input", function () {
+                document.getElementById("loginError").innerHTML = "";
+            });
+        </script>
+        <% } %>
+            <% if (creationSuccess) { %>
+                <script>alert("User account successfully created!");</script>
+                <% } %>
+</div>
