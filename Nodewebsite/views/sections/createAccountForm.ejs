@@ -6,6 +6,15 @@
     <div id="signUp-container" style="margin-top: 20px">
         <div id="signUpForm-conatiner">
             <form id="register" class="needs-validation" method="POST" novalidate="">
+
+                <div class="form-group">
+                    <label for="validationName">Name</label>
+                    <input type="text" class="form-control"
+                           id="validationName" name="name" placeholder="John Doe" required oninput="clearError()">
+                    <div class="invalid-feedback">
+                        Please enter a name.
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="validationEmail">Email</label>
                     <input type="email" class="form-control"

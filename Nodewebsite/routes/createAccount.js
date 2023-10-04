@@ -18,6 +18,7 @@ router.post('/', function (req, res) {
     }
 
     let regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const name = req.body.name;
     var email = req.body.email;
     var organisation = req.body.organisation;
     var occupation = req.body.occupation;
@@ -26,6 +27,7 @@ router.post('/', function (req, res) {
         bcrypt.hash(req.body.password, 10, function (_err, hashedPassword) {
             req.knex('registered_users')
                 .insert({
+                    name: name,
                     email: email,
                     password: hashedPassword,
                     organisation: organisation,
