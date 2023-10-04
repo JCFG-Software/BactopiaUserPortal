@@ -17,6 +17,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Data for Name: registered_users; Type: TABLE DATA; Schema: public; Owner: bactbook
+--
+
+INSERT INTO public.registered_users VALUES ('example1@mail.com', 'John Doe', '$2b$10$qcPnWvdnwjcnQBAs2O/CGup0TNMrAuptq0Mis7BgzEt5CyDpzEOTS', '', '', NULL, NULL);
+INSERT INTO public.registered_users VALUES ('example2@mail.com', 'Jane Doe','$2b$10$hK9RhuAWgVSRySD5kk/dI.B.jzM7lDSxtcpvlN8L4DWmzmi8tevfC', '', '', NULL, NULL);
+
+--
 -- Data for Name: group_samples; Type: TABLE DATA; Schema: public; Owner: bactbook
 --
 
@@ -32,15 +39,6 @@ INSERT INTO public.group_samples VALUES (1, 'SRX4563681');
 --
 
 INSERT INTO public.groups OVERRIDING SYSTEM VALUE VALUES (1, 'example1@mail.com', 'Study', '', '2023-09-15 11:26:12.448+10', '2023-09-17 21:25:15.666+10');
-
-
---
--- Data for Name: registered_users; Type: TABLE DATA; Schema: public; Owner: bactbook
---
-
-INSERT INTO public.registered_users VALUES ('example1@mail.com', '$2b$10$qcPnWvdnwjcnQBAs2O/CGup0TNMrAuptq0Mis7BgzEt5CyDpzEOTS', '', '', NULL, NULL);
-INSERT INTO public.registered_users VALUES ('example2@mail.com', '$2b$10$hK9RhuAWgVSRySD5kk/dI.B.jzM7lDSxtcpvlN8L4DWmzmi8tevfC', '', '', NULL, NULL);
-
 
 --
 -- Data for Name: group_sharing; Type: TABLE DATA; Schema: public; Owner: bactbook

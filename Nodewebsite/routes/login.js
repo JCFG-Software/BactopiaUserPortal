@@ -42,7 +42,7 @@ router.post('/', function (req, res) {
                     res.redirect('/');
                 } else {
                     res.render('pages/login', {
-                        userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: userNotRegistered,
+                        userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: true,
                         favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs
                     });
                 }

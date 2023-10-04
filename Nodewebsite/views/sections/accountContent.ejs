@@ -1,0 +1,274 @@
+<div class="container mt-5">
+    <!-- Profile banner -->
+    <div class="profile-banner pl-3 py-2">
+        <h1>
+            <%= user.name %>
+        </h1>
+        <h4>
+            <%= user.email %>
+        </h4>
+    </div>
+            <!-- error/success message -->
+            <% if (locals.success) { %>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <%= locals.success %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <% } %>
+            <% if (locals.error) { %>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <%= locals.error %>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <% } %>
+
+
+    <!-- Dropdowns: Account Details, Favourites Overview, Groups Overview -->
+
+    <!-- Account Details -->
+    <button type="button" data-toggle="collapse" data-target="#detailsCollapse" aria-expanded="false"
+        aria-controls="detailsCollapse" class="btn btn-block text-left collapseBtn"><span
+            class="material-icons v">keyboard_arrow_right</span>Account Details</button>
+    <div class="collapse my-2" id="detailsCollapse">
+        <div class="card card-body">
+            <div class="row">
+                <div class="col-6">
+                    <h5>Username</h5>
+                    <p>
+                        <%= user.name %>
+                    </p>
+                </div>
+                <div class="col-6">
+                    <h5>Email</h5>
+                    <p>
+                        <%= user.email %>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <h5>Occupation</h5>
+                    <p>
+                        <%= user.occupation || "-" %>
+                    </p>
+                </div>
+                <div class="col-6">
+                    <h5>Organisation</h5>
+                    <p>
+                        <%= user.organisation || "-" %>
+                    </p>
+                </div>
+            </div>
+            <!-- edit functions -->
+            <div class="d-flex flex-row justify-content-around">
+                <div>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">
+                        Edit Profile
+                    </button>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePasswordModal">
+                        Change Password
+                    </button>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog"
+                    aria-labelledby="editProfileModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Form -->
+                                <form method="post" id="updateProfileForm" >
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="<%= user.name %>" required>
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        value="<%= user.email %>" required>
+                                    <label for="occupation">Occupation</label>
+                                    <input type="text" class="form-control" id="occupation" name="occupation"
+                                        value="<%= user.occupation || '' %>">
+                                    <label for="organisation">Organisation</label>
+                                    <input type="text" class="form-control" id="organisation" name="organisation"
+                                        value="<%= user.organisation || '' %>">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password"
+                                        placeholder="Enter your password to save changes" required>
+
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" form="updateProfileForm" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog"
+                    aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Form -->
+                                <form method="post" id="changePasswordForm" >
+                                    <label for="oldPassword">Old Password</label>
+                                    <input type="password" class="form-control" id="oldPassword" name="password"
+                                        placeholder="Old Password " required>
+                                    <label for="newPassword">New Password</label>
+                                    <input type="password" class="form-control" id="newPassword" name="newPassword"
+                                        placeholder="New Password" required>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" form="changePasswordForm" class="btn btn-primary">Confirm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <!-- Metadata Overview -->
+    <button type="button" data-toggle="collapse" data-target="#metadataCollapse" aria-expanded="false"
+        aria-controls="metadataCollapse" class="btn btn-block text-left collapseBtn"><span
+            class="material-icons v">keyboard_arrow_right</span>Metadata Contributions<span id="numContributions">
+            <%= metadataContributions?.length %>
+        </span></button>
+    <div class="collapse my-2" id="metadataCollapse">
+        <div class="card card-body">
+            <!-- Sample ID | Contribution Time -->
+            <% if (metadataContributions.length===0) { %>
+                <p>You have not contributed any metadata yet.</p>
+                <% } else {%>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5>Sample ID</h5>
+                        </div>
+                        <div class="col-6">
+                            <h5>Contribution Time</h5>
+                        </div>
+                    </div>
+                    <% for (var i=0; i < metadataContributions.length; i++) { %>
+                        <div class="row selectable" onclick="selectSample('<%= metadataContributions[i].sample_id %>')">
+                            <div class="col-6">
+                                <p>
+                                    <%= metadataContributions[i].sample_id %>
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <p>
+                                    <%= metadataContributions[i].created.toLocaleDateString('en-GB', { day: 'numeric' ,
+                                        month: 'short' , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , }) %>
+                                </p>
+                            </div>
+                        </div>
+                        <% } %>
+                            <% } %>
+        </div>
+    </div>
+
+    <!-- Groups Overview -->
+    <button type="button" data-toggle="collapse" data-target="#groupsCollapse" aria-expanded="false"
+        aria-controls="groupsCollapse" class="btn btn-block text-left collapseBtn"><span
+            class="material-icons v">keyboard_arrow_right</span>My Groups<span id="numGroups">
+            <%= groups.length %><span></button>
+    <div class="collapse my-2" id="groupsCollapse">
+        <div class="card card-body">
+            <!-- Group Name | Samples | Type -->
+            <!-- where: group name is string, samples is number of samples (n_samples), type is type -->
+            <% if (groups.length===0) { %>
+                <p>You have not joined or created any groups yet.</p>
+                <% } else {%>
+                    <div class="row">
+                        <div class="col-3">
+                            <h5>Group Name</h5>
+                        </div>
+                        <div class="col-3">
+                            <h5>Samples</h5>
+                        </div>
+                        <div class="col-3">
+                            <h5>Created At</h5>
+                        </div>
+                        <div class="col-3">
+                            <h5>Role</h5>
+                        </div>
+                    </div>
+                    <% for (var i=0; i < groups.length; i++) { %>
+                        <div class="row selectable" onclick="selectGroup('<%= groups[i].group_id %>')">
+                            <div class="col-3">
+                                <p>
+                                    <%= groups[i].name %>
+                                </p>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    <%= groups[i].num_samples %>
+                                </p>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    <%= groups[i].created.toLocaleDateString('en-GB', { day: 'numeric' , month: 'short'
+                                        , year: 'numeric' , hour: 'numeric' , minute: 'numeric' , }) %>
+                                </p>
+                            </div>
+                            <div class="col-3">
+                                <p>
+                                    <%= groups[i].type %>
+                                </p>
+                            </div>
+
+                        </div>
+                        <% } %>
+                            <% } %>
+        </div>
+    </div>
+
+    <script>
+        var coll = document.getElementsByClassName("collapseBtn");
+        var i;
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function () {
+                const icon = this.querySelector(".material-icons");
+                // change right<-->down
+                if (icon.innerHTML === "keyboard_arrow_right") {
+                    icon.innerHTML = "keyboard_arrow_down";
+                } else {
+                    icon.innerHTML = "keyboard_arrow_right";
+                }
+            });
+        }
+        function selectGroup(id) {
+            // redirect to group page
+            window.location.href = `/viewGroup?groupId=${id}`;
+        }
+        function selectSample(id) {
+            // redirect to sample page
+            window.location.href = `/result?sampleSelection=${id}`;
+        }
+    </script>
+
+</div>

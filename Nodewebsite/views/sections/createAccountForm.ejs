@@ -9,7 +9,7 @@
                 <div class="form-group">
                     <label for="validationEmail">Email</label>
                     <input type="email" class="form-control"
-                           id="validationEmail" name="email" placeholder="example@example.com" required="">
+                           id="validationEmail" name="email" placeholder="example@example.com" required="" oninput="clearError()">
                     <div class="invalid-feedback">
                         Please enter a valid email address.
                     </div>
@@ -51,14 +51,15 @@
                         </div>
                     </div>
                 </div>
+                <p id="loginError">
+                    <% if(locals.error) { %>
+                        <%= locals.error %>
+                    <% } %>
+                </p>
                 <div class="form-row">
                     <button class="btn btn-dark" type="submit" style="margin: auto; width: 30%;">Register</button>
                 </div>
             </form>
-
-            <% if (userAlreadyExists) { %>
-                <script>alert("User email already registered.");</script>
-            <% } %>
 
             <script>
                 //JavaScript for disabling form submissions if there are invalid fields
@@ -79,6 +80,11 @@
                         });
                     }, false);
                 })();
+
+                function clearError() {
+                    document.getElementById("loginError").innerHTML = "";
+                }
+                 
             </script>
         </div>
     </div>

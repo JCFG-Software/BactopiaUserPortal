@@ -8,9 +8,8 @@ router.get('/', function (req, res) {
         userLoggedIn = true;
     }
 
-    res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: false });
+    res.render('pages/createAccount', { userLoggedIn: userLoggedIn});
 });
-
 
 router.post('/', function (req, res) {
     let userLoggedIn = false;
@@ -24,7 +23,7 @@ router.post('/', function (req, res) {
     var occupation = req.body.occupation;
 
     if (regex.test(email)) {
-        bcrypt.hash(req.body.password, 10, function (err, hashedPassword) {
+        bcrypt.hash(req.body.password, 10, function (_err, hashedPassword) {
             req.knex('registered_users')
                 .insert({
                     email: email,
@@ -33,16 +32,23 @@ router.post('/', function (req, res) {
                     occupation: occupation
                 })
                 .then(() => {
-                    res.redirect('/login');
+                    res.cookie('setCookie', req.body.email, {
+                        httpOnly: true
+                    });
+
+                    req.session.userStatus = "loggedIn";
+                    req.session.userEmail = req.body.email;
+
+                    res.redirect('/');
                 })
-                .catch((err) => {
-                    res.status(400).json({message: "User with that email already exists"});
+                .catch((_err) => {
+                    // render the page again with an error message
+                    res.render('pages/createAccount', { userLoggedIn: userLoggedIn, error: "User already exists" });
                 });
         });
     }
     else {
-        res.status(400).json({message: "Invalid email"});
-        //res.render('pages/createAccount', { userLoggedIn: userLoggedIn, userAlreadyExists: false });
+        res.render('pages/createAccount', { userLoggedIn: userLoggedIn, error: "Invalid Email" });
     }
 });
 

@@ -1,0 +1,40 @@
+
+.profile-banner {
+    position: relative;
+    background: #343a40;
+    border-radius: 0.75rem;
+    color: white;
+}
+
+.container {
+    background: #f1f1f1;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+/* Don't change bg on hover */
+.material-icons:hover {
+    background: none;
+}
+
+.collapseBtn{
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    font-size: 1.3rem;
+}
+
+.collapseBtn:focus,.collapseBtn:active {
+    outline: none !important;
+    box-shadow: none;
+}
+
+.selectable:hover{
+    cursor: pointer;
+    background: #f1f1f1;
+}
+
+#numContributions,#numGroups {
+    /* push to right of div */
+    margin-left: auto;
+}

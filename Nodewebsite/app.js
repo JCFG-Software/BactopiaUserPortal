@@ -91,25 +91,27 @@ function start() {
     /*
     ROUTERS
      */
-    let indexRouter = require("./routes/index");
-    let resultRouter = require("./routes/result");
-    let advancedSearchRouter = require("./routes/advancedSearch");
-    let createAccountRouter = require("./routes/createAccount");
-    let searchResultRouter = require("./routes/searchResults");
-    let advSearchResultRouter = require("./routes/advSearchResults");
-    let loginRouter = require("./routes/login");
-    let favouriteRouter = require("./routes/favourites");
-    let groupsRouter = require("./routes/groups");
-    let viewGroupRouter = require("./routes/viewGroup");
-    let createGroupRouter = require("./routes/createGroup");
-    let shareGroupRouter = require("./routes/addUserToGroup");
-    let addGroupSampleRouter = require("./routes/addGroupSample");
-    let removeGroupRouter = require("./routes/removeGroup");
-    let removeGroupSampleRouter = require("./routes/removeGroupSample");
-    let removeUserGroupAccessRouter = require("./routes/removeUserFromGroup");
-    let uploadResultRouter = require("./routes/uploadResult");
-    let addMetadataRouter = require("./routes/addMetadata");
-    let getCloseSampleRouter = require("./routes/getCloseSamples");
+    const indexRouter = require("./routes/index");
+    const resultRouter = require("./routes/result");
+    const advancedSearchRouter = require("./routes/advancedSearch");
+    const createAccountRouter = require("./routes/createAccount");
+    const searchResultRouter = require("./routes/searchResults");
+    const advSearchResultRouter = require("./routes/advSearchResults");
+    const loginRouter = require("./routes/login");
+    const favouriteRouter = require("./routes/favourites");
+    const groupsRouter = require("./routes/groups");
+    const viewGroupRouter = require("./routes/viewGroup");
+    const createGroupRouter = require("./routes/createGroup");
+    const shareGroupRouter = require("./routes/addUserToGroup");
+    const addGroupSampleRouter = require("./routes/addGroupSample");
+    const removeGroupRouter = require("./routes/removeGroup");
+    const removeGroupSampleRouter = require("./routes/removeGroupSample");
+    const removeUserGroupAccessRouter = require("./routes/removeUserFromGroup");
+    const uploadResultRouter = require("./routes/uploadResult");
+    const addMetadataRouter = require("./routes/addMetadata");
+    const getCloseSampleRouter = require("./routes/getCloseSamples");
+    const accountRouter = require("./routes/account");
+
 
     /* --------------------------------------------------------------------------------
      *
@@ -143,6 +145,7 @@ function start() {
     app.use("/addMetadata", addMetadataRouter);
     app.use("/removeGroup", removeGroupRouter);
     app.use("/getCloseSamples", getCloseSampleRouter);
+    app.use("/account", accountRouter);
 
     /* ---------------------------------------------------------------------------*/
     app.get('/logout', function(req, res) {
@@ -156,6 +159,14 @@ function start() {
         userLoggedIn = req.session.userStatus === "loggedIn";
         res.render('pages/tutorials', { userLoggedIn: userLoggedIn });
     });
+
+    // error page if route doesn't exist
+    app.use(function(req, res, _next) {
+        const attemptedPage = req.originalUrl;
+        const errormessage = `${attemptedPage}`
+        res.status(404).render('pages/error', { description: errormessage, query: '', id: '', endpoint: '', userLoggedIn: req.session.userStatus === "loggedIn" });
+    });
+
 
     app.listen(process.env.PORT, function (){
     // write the port in green to the terminal
