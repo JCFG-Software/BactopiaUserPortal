@@ -1,11 +1,25 @@
-<div id = "errorPage">
+<div id="errorPage">
 
-  <h3> Sorry, there was an error trying to retrieve <%= description %> <%= id %>.</h3>
+    <% if (locals.description) { %>
+        <h3> Sorry, there was an error trying to retrieve <%= locals.description %>
+                <%= locals.id %>.</h3>
+        <% } else if(locals.error) { %>
+            <h3> Hmm, something went wrong. </h3>
+            <p>
+                Error: <%= locals.error %>
+            </p>
+            <% } %>
 
-  <form action="<%= endpoint %>" method="get">
-    <button id="errorButton" submit" name="<%= query %>" onclick="window.location.href='<%= endpoint %>'" value="<%= id %>">
-      Click here to try again
-    </button>
-  </form>
+
+
+                <% if(locals.query && locals.endpoint) { %>
+                    <form action="<%= endpoint %>" method="get">
+                        <button id="errorButton" submit" name="<%= query %>"
+                            onclick="window.location.href='<%= endpoint %>'" value="<%= id %>">
+                            Click here to try again
+                        </button>
+                    </form>
+                    <% } %>
+                    <button onClick="window.location.href='/'" id="errorButton">Return to homepage</button>
 
 </div>

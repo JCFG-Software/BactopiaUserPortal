@@ -157,10 +157,12 @@ function start() {
         res.render('pages/tutorials', { userLoggedIn: userLoggedIn });
     });
 
-
-    app.listen(process.env.PORT);
+    app.listen(process.env.PORT, function (){
     // write the port in green to the terminal
-    console.log('\x1b[32m%s\x1b[0m', 'Server listening on port ' + process.env.PORT);
+    console.log('\x1b[32m%s\x1b[0m', 'Server listening on port ', this.address().port);
+    });
+
+    
 }
 
 checkConnection();

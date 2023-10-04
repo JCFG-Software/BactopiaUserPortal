@@ -6,7 +6,8 @@ const getMLST = require("../utils/getMLST");
 const log = require("debug")("routes:viewGroup");
 
 router.get('/', async function (req, res, next) {
-    let groupId = req.query.groupId;
+    const groupId = req.query.groupId;
+    const userLoggedIn = req.session.userStatus === "loggedIn";
     let errorPageConfig = { description: 'group', query: 'groupId', id: groupId, endpoint: '/viewGroup', userLoggedIn: req.userLoggedIn };
     //console.log(errorPageConfig);
     if (req.allowedAccess == true) {
@@ -71,9 +72,8 @@ router.get('/', async function (req, res, next) {
               samples.time = metadatas[0].time_of_sampling
               samples.notes = metadatas[0].notes
             }
-            
           res.render('pages/viewGroup', {
-            userLoggedIn: req.userLoggedIn,
+            userLoggedIn,
             samples: allSamples,
             groupInfo: groupInfo,
             sharingInfo: sharingInfo,

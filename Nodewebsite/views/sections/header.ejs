@@ -49,7 +49,7 @@
           <a class="nav-link btn btn-sm btn-outline-dark" style="margin-left: 2px; margin-right: 2px; color: #468e94;" href="/advancedSearch">Advanced Search</a>
         </li>
       <!--Link to update metadata if logged in-->
-      <% if (userLoggedIn) { %>
+      <% if (locals.userLoggedIn) { %>
       <li class="nav-item">
         <a class="nav-link btn btn-sm btn-outline-dark" style="margin-left: 2px; margin-right: 2px; color: #468e94;" href="/addMetadata">Update Metadata</a>
       </li>
@@ -59,7 +59,7 @@
           <a class="nav-link btn btn-sm btn-outline-dark" href="/tutorials"  style="margin-left: 2px; margin-right: 2px; color: #468e94;">Help/Tutorial</a>
         </li>
 
-        <% if (userLoggedIn) { %>
+        <% if (locals.userLoggedIn) { %>
         <li class="nav-item">
 
           <!--User menu-->
