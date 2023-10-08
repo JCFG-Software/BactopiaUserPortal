@@ -29,7 +29,7 @@
       Quick search allows you to quickly search for samples with a simple query. Quick search can be accessed at any time via the navigation bar at the top of the page.
       To use the quick search function, choose the field you wish to search in from the drop-down menu and the type your search query in the input area provided.
       <div id="image1">
-        <img src="../images/quicksearch1.JPG" style="width: 100%; margin-bottom: 20px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+        <img src="../images/quicksearch1.png" style="width: 100%; margin-bottom: 20px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
       </div>
       Here are some example searches:
       <ul>
@@ -44,7 +44,7 @@
           Location : "USA"
         </li>
         <li>
-          Strain Name : "HI168"
+          Species : "Lactobacillus"
         </li>
         <li>
           Host : "Homo Sapiens"
@@ -57,31 +57,23 @@
         </li>
       </ul>
       <div id="searcgimage2">
-        <img src="../images/quicksearch2.JPG" style="width: 60%; margin-bottom: 20px; margin-left: 20%; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+        <img src="../images/quicksearch2.png" style="width: 60%; margin-bottom: 20px; margin-left: 20%; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
       </div>
       <div id="searchimage3">
-        <img src="../images/quicksearch3.JPG" style="width: 60%; margin-bottom: 20px; margin-left: 20%; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+        <img src="../images/quicksearch3.png" style="width: 60%; margin-bottom: 20px; margin-left: 20%; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
       </div>
-      <p>
-        BactBook's quick search also provides predictive search functionality. Simply begin typing and StaphBook will show suggestions from the database that match the query you are entering.
-        For example, with the host field selected, typing "Ho" will display matches in the database.In this case, it will suggest "Homo sapiens" as an option.
-        <div id="searchimage4">
-          <img src="../images/quicksearch4.JPG" style="width: 60%; margin-bottom: 20px; margin-left: 20%; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
-        </div>
-        Simply click the suggestion you want and the input field will be automatically filled. Once you are satisfied with your search query, click the search icon to conduct your search.
-      </p>
       <h4>
         Advanced Search
       </h4>
       <p>
         Advanced search allows you do refine your search to a very specific list of samples.
         <div id="advimage1">
-          <img src="../images/advancedsearch1.JPG" style="width: 100%; margin-bottom: 20px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+          <img src="../images/advancedsearch1.png" style="width: 100%; margin-bottom: 20px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
         </div>
         With the advanced search function, you are able define the sequence type, location,
         range of date isolated, strain name, host and isolation source. <b>You do not need to fill in all of the fields</b>, only the one's you wish to refine your search with.
         <div id="advimage2">
-          <img src="../images/advancedsearch2.JPG" style="width: 80%; margin-bottom: 20px; margin-left: 10%; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+          <img src="../images/advancedsearch2.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
         </div>
         Once you are happy with your query, click the search button at the bottom of the page to begin your search.
       </p>
@@ -91,10 +83,28 @@
       <p>
         Once you have searched for the sample you want to find you will taken to a page with a list of results that match your search query.
         <div id="resimage1">
-          <img src="../images/searchresults1.JPG" style="width: 80%; margin-bottom: 20px; margin-left: 10%; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+          <img src="../images/searchresults1.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
         </div>
         Click on a result from the list to be taken to the sample's information page.
       </p>
+      <h4>
+        Updating and Viewing Sample Metadata
+      </h4>
+      <p>
+        On the sample results page, the samples metadata will be displayed for viewing. If you are logged in as a user of BactBook, you will be able to update the samples metadata.
+        Update a samples metadata by heading to the "update metadata" page found in the user drop-down menu on the navigation bar or by the update metadata button on the results page.
+        When on the update page, select the sample you want to update. The existing metadata will be pre-filled into the input boxes. Simply change 
+        the metadata you want to update and click the update button at the bottom of the page. This will update the metadata for all users.
+          <div id="metimage4">
+            <img src="../images/updatemetadata.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+          </div>
+          You can view the metadata history for a sample by clicking the "metadata history" button. This will show you whose made changes to the metadata and when.
+          <div id="metimage5">
+            <img src="../images/metadatahistory.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"> </img>
+          </div>
+          You can also view all changes you have made to metadata in the account page.
+        </p>
+    </div>
       <h4>
         Recommended Samples
       </h4>
@@ -102,54 +112,72 @@
         At the bottom of the sample's information page you will find an interactive element with nodes representing the samples that share certain attributes with the sample you are currently viewing.
         Between the current sample you are viewing and the other nodes you will see various colored lines. Each coloured line represents the attributes that the samples share.
         <div id="recimage1">
-          <img src="../images/recommended1.JPG" style="width: 80%; margin-bottom: 20px; margin-left: 10%; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img> </div>
+          <img src="../images/recommended1.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img> </div>
         To move the nodes on the element around, click and drag the node around the element.<br/>
           To zoom in and out of the element, click the zoom in and out buttons above the element or place your cursor on the element and use the mouse scroll wheel.
           <div id="recimage4">
-            <img src="../images/recommended4.jpg" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+            <img src="../images/recommended4.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
           </div>
           The element can be reset to its original position using the 'center' button above the element.
           <div id="recimage5">
-            <img src="../images/recommended5.jpg" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"> </img>
+            <img src="../images/recommended5.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"> </img>
           </div>
           To increase the size of the element, select the 'increase' option above the element. You decrease it again by selecting the 'decrease' option.
           <div id="recimage2">
-            <img src="../images/recommended2.JPG" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"> </img>
+            <img src="../images/recommended2.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"> </img>
           </div>
           You can view more information about the nodes by clicking on them. From there you will be given the option to view that sample's information page.
           <div id="recimage3">
-            <img src="../images/recommended3.JPG" style="width: 50%; margin-bottom: 20px; margin-left: 25%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"> </img>
+            <img src="../images/recommended3.png" style="width: 50%; margin-bottom: 20px; margin-left: 25%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"> </img>
           </div>
         </p>
-    </div>
   <div id="tutorial3" style="margin-top:60px" >
     <h3>How to save the data you have found</h3>
     <p>
       BactBook provides a number of options to save data or access the data you want quickly with the use of favorites.
     </p>
     <h4>
-      Favorites
+      Favourites
     </h4>
     <p>
       If you are logged in as a user of BactBook, you will be able to favorite any genome sample and access it from a list of your favorited samples.
       This is to help you save time searching for the same samples multiple times.
       BactBook also provides a list of recommended samples based on the weighted distance between the recommended samples and your favorited samples.
       <div id="savimage1">
-          <img src="../images/savedata1.JPG" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"> </img>
+          <img src="../images/savedata1.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"> </img>
       </div>
       To favorite a sample, head to the sample's information page. If you are logged in to BactBook a heart icon will be visible below the title.
       An empty heart indicates that the sample is not favorited. To add the sample to your favorites, click the heart.
       <div id="savimage2">
-          <img src="../images/savedata2.JPG" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+          <img src="../images/savedata2.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
       </div>
       The empty heart will be replaced with a full heart indicating that the sample has been favorited.
       <div id="savimage3">
-          <img src="../images/savedata3.JPG" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+          <img src="../images/savedata3.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
       </div>
       Click on the heart again to remove the sample from your favorites.
       A list of all your favorites can be accessed from the user drop-down menu on the navigation bar.
       <div id="savimage4">
-          <img src="../images/savedata6.JPG" style="width: 50%; margin-bottom: 20px; margin-left: 25%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+          <img src="../images/savedata6.png" style="width: 50%; margin-bottom: 20px; margin-left: 25%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+      </div>
+    </p>
+    <h4>
+      Groups
+    </h4>
+    <p>
+      If you are logged in as a user of BactBook, you will be able to create groups of genomes, to compare them with each other. Create a group by selecting the 'Create Group' option from the user drop-down menu
+      on the sample results page, or via the groups page found in the user drop-down menu.
+      <div id="savimage1">
+          <img src="../images/addtogroup1.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"> </img>
+      </div>
+      Once a group has been created, you can add samples to it by clicking the 'Add to Group' button on the sample information page. You can then compare the samples metadata
+      in the group page found in the user drop-down menu.
+      <div id="savimage3">
+          <img src="../images/groups2.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+      </div>
+      Share a group with other users by using the "Collaborators" tool at the bottom of the group page, by either sharing with a specific user or making the group public.
+      <div id="savimage4">
+          <img src="../images/collaborators.png" style="width: 50%; margin-bottom: 20px; margin-left: 25%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
       </div>
     </p>
     <h4>
@@ -160,13 +188,14 @@
         Simply click the download icon next to the sample information title to download a CSV file containing all the information.
         This file can be opened in Microsoft Excel or any similar program that can read CSV files.
       <div id="savimage5">
-          <img src="../images/savedata5.JPG" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+          <img src="../images/savedata5.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
       </div>
 
         The current view of the visual genome network can be downloaded by clicking the image button above the interactive element.
       <div id="savimage6">
-          <img src="../images/savedata4.JPG" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
+          <img src="../images/savedata4.png" style="width: 80%; margin-bottom: 20px; margin-left: 10%; margin-top: 10px; padding: 3px 3px 3px 3px; border: 0.5px solid silver;"></img>
       </div>
     </p>
   </div>
+</div>
 </div>

@@ -93,8 +93,7 @@ router.get('/groups', function (req, res) {
 
     }
     else{
-        res.status(404);
-        res.send({ error: 'Not found' });
+        res.render('pages/error', {error: 'Not Logged In'});
     }
 })
 
@@ -137,8 +136,7 @@ router.post('/updateGroup', function (req, res) {
         return;
     }
     else{
-        res.status(404);
-        res.send({ error: 'Not found' });
+        res.redirect('/error', {error: 'Not Logged In'});
     }
 })
 

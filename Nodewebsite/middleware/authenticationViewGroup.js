@@ -15,6 +15,7 @@ function checkUserLoggedIn (req, res, next) {
 
 function checkUserHasAccess(req, res, next) {
   req.allowedAccess = false;
+
   let groupId = req.query.groupId;
   let userEmail = decodeURIComponent(req.session.userEmail);
   let truncatedGroups = req.knex
@@ -50,5 +51,7 @@ function checkUserHasAccess(req, res, next) {
       });
 }
 
-module.exports = checkUserHasAccess;
+const authenticateUserView = [checkUserLoggedIn, checkUserHasAccess];
+
+module.exports = authenticateUserView;
 

@@ -39,6 +39,13 @@
   <link rel="stylesheet" type="text/css" href="../style.css">
   <link rel="stylesheet" type="text/css" href="../styles/groupStyles.css">
   <link rel="stylesheet" type="text/css" href="../styles/resultStyles.css">
+
+  <% if(locals.stylesheets){ %>
+    <% for(var i=0; i<locals.stylesheets.length; i++){ %>
+      <link rel="stylesheet" type="text/css" href="../styles/<%= locals.stylesheets[i] %>">
+    <% } %>
+    <% } %>
+
   <link href="https://fonts.googleapis.com/css?family=News+Cycle" rel="stylesheet">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
         integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"

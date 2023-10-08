@@ -792,7 +792,7 @@ function removeGenomeSamples() {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({groupId: <%- groupInfo.group_id %>, email: email})
+      body: JSON.stringify({groupId: <%- groupInfo.group_id %>, email: email ?? ""})
       })
       .then(response => {
           console.log(response);
@@ -887,7 +887,7 @@ function removeGenomeSamples() {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({groupId: <%- groupInfo.group_id %>, email: <%-  JSON.stringify(email) %>})
+      body: JSON.stringify({groupId: <%- groupInfo.group_id %>, email: <%-  JSON.stringify(email ?? "")  %>})
       })
       .then(response => {
           //console.log(response);
@@ -959,7 +959,7 @@ function removeGenomeSamples() {
     setupRemoveCheckBoxes();
     displayMaxPage();
 
-    let email = <%-  JSON.stringify(email) %>;
+    let email = <%-  JSON.stringify(email ?? "") %>;
     let collaborators = <%-  JSON.stringify(sharingInfo) %>;
     let owner = <%-  JSON.stringify(groupInfo.email) %>;
     let status = <%-  JSON.stringify(groupInfo.status) %>;

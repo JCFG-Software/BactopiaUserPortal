@@ -6,10 +6,19 @@
     <div id="signUp-container" style="margin-top: 20px">
         <div id="signUpForm-conatiner">
             <form id="register" class="needs-validation" method="POST" novalidate="">
+
+                <div class="form-group">
+                    <label for="validationName">Name</label>
+                    <input type="text" class="form-control"
+                           id="validationName" name="name" placeholder="John Doe" required oninput="clearError()">
+                    <div class="invalid-feedback">
+                        Please enter a name.
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="validationEmail">Email</label>
                     <input type="email" class="form-control"
-                           id="validationEmail" name="email" placeholder="example@example.com" required="">
+                           id="validationEmail" name="email" placeholder="example@example.com" required="" oninput="clearError()">
                     <div class="invalid-feedback">
                         Please enter a valid email address.
                     </div>
@@ -51,14 +60,15 @@
                         </div>
                     </div>
                 </div>
+                <p id="loginError">
+                    <% if(locals.error) { %>
+                        <%= locals.error %>
+                    <% } %>
+                </p>
                 <div class="form-row">
                     <button class="btn btn-dark" type="submit" style="margin: auto; width: 30%;">Register</button>
                 </div>
             </form>
-
-            <% if (userAlreadyExists) { %>
-                <script>alert("User email already registered.");</script>
-            <% } %>
 
             <script>
                 //JavaScript for disabling form submissions if there are invalid fields
@@ -79,6 +89,11 @@
                         });
                     }, false);
                 })();
+
+                function clearError() {
+                    document.getElementById("loginError").innerHTML = "";
+                }
+                 
             </script>
         </div>
     </div>
