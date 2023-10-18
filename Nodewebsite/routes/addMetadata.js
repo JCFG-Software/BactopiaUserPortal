@@ -3,7 +3,7 @@ var router = express.Router()
 const getAllSampleNames = require('../utils/getAllSampleNames')
 const log = require('debug')('routes:addMetadata')
 
-// advanced search page
+// route for adding metadata
 router.get('/', async function(req, res) {
     let userLoggedIn = false;
     if (req.session.userStatus === "loggedIn") {
@@ -11,7 +11,7 @@ router.get('/', async function(req, res) {
         userEmail = req.session.userEmail;
     }
     const sampleNames = getAllSampleNames();
-    res.render('pages/uploadSample', { userLoggedIn: userLoggedIn, samples: sampleNames });
+    res.render('pages/updateMetadata', { userLoggedIn: userLoggedIn, samples: sampleNames });
 });
 
 // route for getting json data about sample (not rendering page)
@@ -29,6 +29,15 @@ router.get('/json', async function(req, res) {
 router.post('/', function(req, res) {
     if (req.body.sample_id == undefined) {
         res.redirect('/addMetadata');
+        return;
+    }
+    let userLoggedIn = false;
+    let userEmail = "";
+    if (req.session.userStatus === "loggedIn") {
+        userLoggedIn = true;
+        userEmail = req.session.userEmail;
+    }else{
+        res.redirect('/login');
         return;
     }
     let sampleID = req.body.sample_id;
