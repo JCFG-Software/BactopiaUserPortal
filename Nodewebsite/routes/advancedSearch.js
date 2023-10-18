@@ -1,7 +1,11 @@
 var express = require('express')
 var router = express.Router()
 
-// advanced search page
+/**
+    * GET advanced search page
+    * Page with simple HTML form for advanced search
+    * Redirects to routes/advSearchResults.js
+*/
 router.get('/', function (req, res) {
     let userLoggedIn = false;
     if (req.session.userStatus === "loggedIn") {

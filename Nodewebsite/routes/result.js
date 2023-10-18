@@ -1,25 +1,17 @@
-/*
-    * @api {get} /result Result
-    *
-*/
-
-
 const express = require('express');
 const getGatherData = require('../utils/getGatherData');
 const getAssemblerData = require('../utils/getAssemblerData');
 const getAnnotations = require('../utils/getAnnotations');
 const getQualityControlData = require('../utils/getQualityControlData');
 const getMLSTData = require('../utils/getMLST');
-const getAllSamples = require('../utils/getAllSampleNames');
-
-
-const { exec } = require('child_process');
-const fs = require('fs');
 const router = express.Router()
 let url = require('url')
 const log = require('debug')('routes:result')
 
-// Result page endpoint 
+/**
+    * GET Result
+    * Main page for viewing a sample
+    */
 router.get('/', async function(req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
     let sampleName = req.query.sampleSelection;
@@ -85,8 +77,7 @@ router.get('/', async function(req, res) {
     const annotations = getAnnotations(sampleName);
 
     const metadatas = await req.knex.select('isolation_host', 'isolation_source', 'isolation_location', 'time_of_sampling', 'notes', 'email', 'created').from('metadata')
-    .where({sample_id: sampleName}).orderBy('created', 'desc');
-    console.log(metadatas)
+        .where({ sample_id: sampleName }).orderBy('created', 'desc');
     // Tools - May or may not exist
     const mlst = getMLSTData(sampleName);
 
@@ -111,7 +102,7 @@ router.get('/', async function(req, res) {
             });
         })
         .catch(function(err) {
-            console.log(err);
+            log(err);
             res.render('pages/error', errorPageConfig);
         });
 
@@ -120,11 +111,11 @@ router.get('/', async function(req, res) {
     return;
 });
 
-// Favorites endpoint
+// POST Favourite Sample
+// NOTE: This is existing code, and could be better refactored into its own API endpoint
 router.post('/', function(req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
     let isFavourite = req.session.favourited;
-    let email = "NA";
     let sampleID = req.session.prevSample;
 
     let errorPageConfig = {
@@ -144,7 +135,6 @@ router.post('/', function(req, res) {
                 .where({ email: email, sample_id: sampleID })
                 .del()
                 .then((result) => {
-                    console.log(`User favorites record ${email}-${sampleID} has been deleted successfully`);
                     res.redirect(url.format({
                         pathname: "/result",
                         query: {
@@ -153,7 +143,7 @@ router.post('/', function(req, res) {
                     }));
                 })
                 .catch((error) => {
-                    console.log(`User favourites record ${email}-${sampleID} does not exist and cannot be deleted`);
+                    log(`User favourites record ${email}-${sampleID} does not exist and cannot be deleted`);
                     errorPageConfig.description = `User favourites record ${email}-${sampleID} does not exist and cannot be deleted`;
                     res.render('pages/error', errorPageConfig);
                 })
@@ -161,12 +151,10 @@ router.post('/', function(req, res) {
         else {
             let value = req.session.userEmail;
             let email = decodeURIComponent(value);
-            console.log(email);
             // Unique constraint applied in postgres database
             req.knex('user_favorites')
                 .insert({ email: email, sample_id: sampleID })
                 .then((result) => {
-                    console.log(`${sampleID} added to ${email}'s' favourites`);
                     res.redirect(url.format({
                         pathname: "/result",
                         query: {
@@ -175,7 +163,8 @@ router.post('/', function(req, res) {
                     }));
                 })
                 .catch((error) => {
-                    console.log("Already added to favourites");
+                    log("Already added to favourites");
+                    log(error);
                     errorPageConfig.description = "Sample already in favorites";
                     res.render('pages/error', errorPageConfig);
                 })

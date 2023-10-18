@@ -1,17 +1,29 @@
 const express = require('express')
 const router = express.Router()
 let bcrypt = require('bcrypt')
+const log = require('debug')('routes:createAccount')
 
-router.get('/', function (req, res) {
+/**
+    * GET create account page
+    * Page with simple HTML form for creating an account
+    * Form submits to below POST route
+    */
+router.get('/', function(req, res) {
     let userLoggedIn = false
     if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
     }
 
-    res.render('pages/createAccount', { userLoggedIn: userLoggedIn});
+    res.render('pages/createAccount', { userLoggedIn: userLoggedIn });
 });
 
-router.post('/', function (req, res) {
+/**
+    * POST create account page
+    * validates input and creates an account
+    * redirects to home page on success
+    * redirects to create account page on failure
+    */
+router.post('/', function(req, res) {
     let userLoggedIn = false;
     if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
@@ -24,7 +36,7 @@ router.post('/', function (req, res) {
     var occupation = req.body.occupation;
 
     if (regex.test(email)) {
-        bcrypt.hash(req.body.password, 10, function (_err, hashedPassword) {
+        bcrypt.hash(req.body.password, 10, function(_err, hashedPassword) {
             req.knex('registered_users')
                 .insert({
                     name: name,
@@ -43,7 +55,9 @@ router.post('/', function (req, res) {
 
                     res.redirect('/');
                 })
-                .catch((_err) => {
+                .catch((err) => {
+                    log(`Could not create account for ${email}.`);
+                    log(err);
                     // render the page again with an error message
                     res.render('pages/createAccount', { userLoggedIn: userLoggedIn, error: "User already exists" });
                 });

@@ -7,7 +7,7 @@ const getAllSampleNames = require('./getAllSampleNames')
 const categories = {
     'name': "/*",
     'annotations': '/**/annotator/prokka/*.tsv',
-    'species':  '/**/gather/*.tsv',
+    'species': '/**/gather/*.tsv',
     'sequence_type': '/**/mlst/*.tsv',
 }
 
@@ -23,7 +23,7 @@ const categories = {
  * @param {string[]} samples - optional list of samples to search within
     *                         if not provided, all samples are searched
  */
-function searchGenomes(query, category, samples=undefined) {
+function searchGenomes(query, category, samples = undefined) {
     // join the glob with the samplesdir env var
     if (!categories[category]) {
         throw new Error('Invalid category: ' + category + '. Valid categories are: ' + Object.keys(categories).join(', ') + '. ')
@@ -45,8 +45,7 @@ function searchGenomes(query, category, samples=undefined) {
     }
 
     const pattern = path.join(process.env.SAMPLES_DIR, categories[category])
-    log(pattern)
-    let files = glob.sync(pattern, {posix: true, dotRelative: true, windowsPathsNoEscape: true})
+    let files = glob.sync(pattern, { posix: true, dotRelative: true, windowsPathsNoEscape: true })
     if (samples) {
         // filter the files to only those in the samples list
         files = files.filter((file) => {
@@ -54,11 +53,22 @@ function searchGenomes(query, category, samples=undefined) {
             return samples.includes(sampleName)
         })
     }
-    log(`Searching ${files.length} files for ${query}`)
     const queries = query.split(',').map((q) => q.trim())
     const results = []
     for (const file of files) {
         const data = fs.readFileSync(file, 'utf8')
+        // if searching for sequenc type, need to use regex padded with whitespace
+        if (category === 'sequence_type') {
+            const regex = new RegExp(`\\s${queries.join('|')}\\s`)
+            if (regex.test(data)) {
+                // found the text, add the sample name to the results
+                const sampleName = file.split(process.env.SAMPLES_DIR)[1].split("/")[1]
+                results.push(sampleName)
+            }
+            continue
+        }
+
+
         if (queries.every((q) => data.toLowerCase().includes(q.toLowerCase()))) {
             // found the text, add the sample name to the results
             // sample name is the directory name right after the SAMPLES_DIR

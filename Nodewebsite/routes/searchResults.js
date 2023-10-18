@@ -5,8 +5,6 @@ const getGatherData = require('../utils/getGatherData');
 const log = require('debug')('routes:searchResults');
 
 // GET request for searching. If errors (wrong category etc.) then return to home page
-// TODO: Add better error handling and communication
-//
 router.get('/', async function(req, res) {
     let userLoggedIn = false;
     if (req.session.userStatus === "loggedIn") {

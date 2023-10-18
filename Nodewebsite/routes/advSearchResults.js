@@ -4,6 +4,10 @@ const searchGenomes = require('../utils/searchGenomes');
 const getGatherData = require('../utils/getGatherData');
 const log = require('debug')('routes:advSearchResults');
 
+/**
+    * GET advanced search results page
+    * Searching with multiple different fields at once
+    */
 router.get('/', async function(req, res) {
     let userLoggedIn = false;
     if (req.session.userStatus === "loggedIn") {
@@ -25,24 +29,24 @@ router.get('/', async function(req, res) {
     let metadata_results = null;
 
     // First -> do a db query for the metadata fields that are not null (host, location, source, time)
-    if(isolation_host || isolation_location || isolation_source || time_of_sampling) {
-    metadata_results  = await req.knex.select(
-        "sample_id", 'isolation_host', 'isolation_location', 'isolation_source', 'time_of_sampling',
-    ).from(
-        req.knex.select("*").distinctOn('sample_id')
-            .from('metadata')
+    if (isolation_host || isolation_location || isolation_source || time_of_sampling) {
+        metadata_results = await req.knex.select(
+            "sample_id", 'isolation_host', 'isolation_location', 'isolation_source', 'time_of_sampling',
+        ).from(
+            req.knex.select("*").distinctOn('sample_id')
+                .from('metadata')
+                .orderBy('sample_id', 'asc')
+                .orderBy('created', 'desc')
+                .as('metadata')
+        )
+            .modify(function(queryBuilder) {
+                if (isolation_host) queryBuilder.where('isolation_host', 'ILIKE', '%' + isolation_host + '%');
+                if (isolation_location) queryBuilder.where('isolation_location', 'ILIKE', '%' + isolation_location + '%');
+                if (isolation_source) queryBuilder.where('isolation_source', 'ILIKE', '%' + isolation_source + '%');
+                if (time_of_sampling) queryBuilder.where('time_of_sampling', 'ILIKE', '%' + time_of_sampling + '%');
+            })
             .orderBy('sample_id', 'asc')
-            .orderBy('created', 'desc')
-            .as('metadata')
-    )
-        .modify(function (queryBuilder) {
-            if (isolation_host) queryBuilder.where('isolation_host', 'ILIKE', '%' + isolation_host + '%');
-            if (isolation_location) queryBuilder.where('isolation_location', 'ILIKE', '%' + isolation_location + '%');
-            if (isolation_source) queryBuilder.where('isolation_source', 'ILIKE', '%' + isolation_source + '%');
-            if (time_of_sampling) queryBuilder.where('time_of_sampling', 'ILIKE', '%' + time_of_sampling + '%');
-        })
-        .orderBy('sample_id', 'asc')
-        .orderBy('created', 'desc');
+            .orderBy('created', 'desc');
     }
 
 

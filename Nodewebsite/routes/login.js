@@ -1,8 +1,14 @@
 var express = require('express')
 var router = express.Router()
 let bcrypt = require('bcrypt');
+const log = require('debug')('routes:login')
 
-router.get('/', function (req, res) {
+/**
+    * GET login page
+    * Page with simple HTML form for logging in
+    * Form submits to below POST route
+    */
+router.get('/', function(req, res) {
     let userLoggedIn = false;
     if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
@@ -10,25 +16,24 @@ router.get('/', function (req, res) {
     res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: false });
 });
 
-router.post('/', function (req, res) {
+/**
+    * POST login page
+    * validates input and logs in
+    * redirects to home page on success
+    */
+router.post('/', function(req, res) {
     let userLoggedIn = false;
     if (req.session.userStatus === "loggedIn") {
         userLoggedIn = true;
 
     }
-    let favorites = [];
-    let suggested = [];
-    let haveFavs = false;
-    let haveSugs = false;
     let email = decodeURIComponent(req.body.email);
-
     req.knex.select("*").from("registered_users").where({ email: email }).then((result_registered_users, err) => {
         if (result_registered_users.length !== 1) {
-            console.log('user not registered');
             var userNotRegistered = true;
             res.render('pages/login', { userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: userNotRegistered });
         } else {
-            bcrypt.compare(req.body.password, result_registered_users[0].password, function (err, result) {
+            bcrypt.compare(req.body.password, result_registered_users[0].password, function(err, result) {
                 //if password matched DB password
                 if (result) {
                     //setting the 'set-cookie' header
@@ -43,12 +48,15 @@ router.post('/', function (req, res) {
                 } else {
                     res.render('pages/login', {
                         userLoggedIn: userLoggedIn, creationSuccess: false, userNotRegistered: true,
-                        favorites: favorites.rows, suggested: suggested.rows, haveFavs: haveFavs, haveSugs: haveSugs
                     });
                 }
             });
         }
+    }).catch((err) => {
+        log(`Could not login for ${email}.`);
+        log(err);
     });
+
 });
 
 module.exports = router;

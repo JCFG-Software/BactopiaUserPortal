@@ -2,7 +2,6 @@ var express = require('express')
 var router = express.Router()
 let url = require('url')
 
-// Result page endpoint
 router.get('/', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
     let sampleID = req.query.sampleSelection;

@@ -1,6 +1,10 @@
 var express = require('express')
 var router = express.Router()
+const log = require('debug')('routes:removeGroupSample')
 
+/**
+    * POST Remove Group Sample
+    */
 router.post('/', function (req, res) {
     let userLoggedIn = req.session.userStatus === "loggedIn";
     let groupId = req.body.groupId;
@@ -20,7 +24,7 @@ router.post('/', function (req, res) {
                 res.status(200).json({"message": "successfully removed from group"})
             })
             .catch((err) => {
-                console.log(err);
+                log(err)
                 res.status(401).json({"message": "error deleting from group"})
             });
     }
