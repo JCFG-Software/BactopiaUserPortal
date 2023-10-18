@@ -23,7 +23,7 @@
 }
 
 button.selected {
-  background-color: #468e94;
+  background-color: #468e94 !important;
   color: white;
 }
 
