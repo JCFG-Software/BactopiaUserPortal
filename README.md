@@ -29,7 +29,6 @@ notes:
 - PostgresSQL v14
 - [Mash](https://github.com/marbl/Mash) for distance estimation features
 - Bactopia Output Files (V3.00)
-  - Old folder structure currently supported, recommended to download data from releases page on the right.
 <details>
 <summary>Node.js</summary>
   
