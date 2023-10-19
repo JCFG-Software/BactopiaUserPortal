@@ -1,12 +1,12 @@
 
 // Script for dynamically fetching existing metadata about a sample
 //
-    // Listens for a change to the selected sample field
-    // Fetches the metadata for the selected sample from server ( GET /json?sample=sampleName)
-    // and populates the metadata fields with the returned data placeholders
+// Listens for a change to the selected sample field
+// Fetches the metadata for the selected sample from server ( GET /json?sample=sampleName)
+// and populates the metadata fields with the returned data placeholders
 //
 
-async function changeSelectedSample(selection){
+async function changeSelectedSample(selection) {
 
     // hide the form on the page
     document.getElementById("metadataFields").style.display = "none";
@@ -16,7 +16,7 @@ async function changeSelectedSample(selection){
     var sampleName = selection[0].value;
 
     // Fetch the metadata for the selected sample
-    var response = await fetch('/addMetadata/json?sampleName='+sampleName);
+    var response = await fetch('/addMetadata/json?sampleName=' + sampleName);
     var data = await response.json();
 
     // Populate the metadata fields with the returned data
@@ -39,6 +39,19 @@ async function changeSelectedSample(selection){
     document.getElementById("metadataFields").style.display = "block";
 
 }
+
+// on page load, check if there is a sample selected as a query parameter
+// if there is, select that sample in the dropdown
+window.addEventListener('load', function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var sampleName = urlParams.get('sample');
+    if (sampleName) {
+        document.getElementById("samples").value = [sampleName];
+        changeSelectedSample(document.getElementById("samples").selectedOptions);
+    }
+});
+
+
 
 
 

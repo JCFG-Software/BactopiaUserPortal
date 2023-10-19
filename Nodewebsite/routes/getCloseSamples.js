@@ -7,7 +7,11 @@ const getMLST = require('../utils/getMLST')
 const getAllSampleNames = require('../utils/getAllSampleNames')
 const getANI = require('../utils/getANI')
 
-// Returns close samples and their metadata for use in the funcional network view
+/**
+    * GET close samples API
+    * Returns close samples and their metadata for use in the funcional network view
+    * @returns {JSON} close samples and their metadata
+    */
 router.get('/', async function(req, res) {
     const sampleId = req.query.sampleId;
     const allSamples = getAllSampleNames();
@@ -20,7 +24,7 @@ router.get('/', async function(req, res) {
     // get metadata where sampleId in others using knex
     const metadata = await req.knex.select(
         "sample_id",
-        'isolation_host', 'isolation_location', 'isolation_source', 'time_of_sampling', 
+        'isolation_host', 'isolation_location', 'isolation_source', 'time_of_sampling',
     ).distinctOn('sample_id')
         .from('metadata')
         .whereIn('sample_id', allSamples)

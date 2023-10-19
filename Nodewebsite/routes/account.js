@@ -2,6 +2,12 @@ var express = require('express')
 var router = express.Router()
 const bcrypt = require('bcrypt');
 
+/**
+ * GET account page
+    * Page with basic information about a user, with options to update information
+    * @module routes/account
+    * @requires express
+ */ 
 router.get('/', async function(req, res) {
 
     const userLoggedIn = req.session.userStatus === "loggedIn";
@@ -15,7 +21,6 @@ router.get('/', async function(req, res) {
     // 2. Metadata contributions
     // 3. Groups
     // 4. Favourites
-    //
 
     const user = (await req.knex.select('name', 'email', 'organisation', 'occupation').from('registered_users').where({ email: decodeURIComponent(req.session.userEmail) }))?.[0];
     if (!user) {
@@ -64,7 +69,11 @@ router.get('/', async function(req, res) {
 
 });
 
-// updating account
+/**
+    * POST account page
+    * For updating user information
+    * @name POST/account
+*/
 router.post('/', async function(req, res) {
     // the user may update their password, name, organisation, occupation, or email
     //  - in any case, we need to check the given password is correct

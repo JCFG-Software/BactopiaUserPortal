@@ -107,7 +107,6 @@ function start() {
     const removeGroupRouter = require("./routes/removeGroup");
     const removeGroupSampleRouter = require("./routes/removeGroupSample");
     const removeUserGroupAccessRouter = require("./routes/removeUserFromGroup");
-    const uploadResultRouter = require("./routes/uploadResult");
     const addMetadataRouter = require("./routes/addMetadata");
     const getCloseSampleRouter = require("./routes/getCloseSamples");
     const accountRouter = require("./routes/account");
@@ -134,14 +133,13 @@ function start() {
     app.use("/advSearchResults", advSearchResultRouter);
     app.use("/login", loginRouter);
     app.use("/favourites", favouriteRouter);
-    app.use("/", groupsRouter);
+    app.use("/groups", groupsRouter);
     app.use("/viewGroup", authenticateUserView, viewGroupRouter);
     app.use("/removeGroupSample", authenticateUserEdit, removeGroupSampleRouter)
     app.use("/addGroupSample", authenticateUserEdit, addGroupSampleRouter)
     app.use("/createGroup", createGroupRouter);
     app.use("/addUserToGroup", authenticateUserEdit, shareGroupRouter);
     app.use("/removeUserFromGroup", authenticateUserEdit, removeUserGroupAccessRouter);
-    app.use("/uploadResult", uploadResultRouter);
     app.use("/addMetadata", addMetadataRouter);
     app.use("/removeGroup", removeGroupRouter);
     app.use("/getCloseSamples", getCloseSampleRouter);

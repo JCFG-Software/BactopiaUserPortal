@@ -68,15 +68,21 @@
   function loadGroups(titleId, groups, description){ // Given div id to insert cards in and group details
     let publicGroupButton = document.getElementById('publicGroupsButton');
     publicGroupButton.style.fontWeight = 'normal';
+    publicGroupButton.classList.remove('selected');
 
     let sharedGroupButton = document.getElementById('sharedGroupsButton');
     sharedGroupButton.style.fontWeight = 'normal';
+    sharedGroupButton.classList.remove('selected');
 
     let userGroupButton = document.getElementById('userGroupsButton');
     userGroupButton.style.fontWeight = 'normal';
+    userGroupButton.classList.remove('selected');
 
     let focusedGroupButton = document.getElementById(titleId);
+    // add the 'selected' class to the element
     focusedGroupButton.style.fontWeight = 'bold';
+    focusedGroupButton.classList.add('selected');
+
 
     let displayGroupsDiv = document.getElementById('groupsCards');
     displayGroupsDiv.innerHTML = "";
