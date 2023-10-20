@@ -60,7 +60,6 @@ async function getANI(sample_id){
         }
         ani_data[line_obj.query] = line_obj;
     }
-    log(ani_data);
     return ani_data;
 }
 

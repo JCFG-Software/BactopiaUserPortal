@@ -135,13 +135,13 @@
             <button type="button" class="collapsible"><span
                     class="material-icons v">keyboard_arrow_down</span>Sequencing Metrics</button>
             <div class="sectionContent" id="Sequencing">
-                <% include ../snippets/resultSequence %>
+                <%- include('../snippets/resultSequence') %>
             </div>
 
             <button type="button" class="collapsible"><span class="material-icons v">keyboard_arrow_down</span>Assembly
                 Metrics</button>
             <div class="sectionContent" id="Assembly">
-                <% include ../snippets/resultAssembly %>
+                <%- include('../snippets/resultAssembly') %>
             </div>
 
             <% if (locals.mlst) { %>
@@ -180,7 +180,7 @@
                         <button type="button" class="collapsible"><span
                                 class="material-icons v">keyboard_arrow_down</span>Annotations</button>
                         <div class="sectionContent" id="Assembly">
-                            <% include ../snippets/resultAnnotations %>
+                            <%- include('../snippets/resultAnnotations') %>
                         </div>
                         <% } %>
 
@@ -339,7 +339,7 @@
 
                                     <div class="row">
                                         <div class="col">
-                                            <% include ../snippets/rangedSliderGeneticDistance.ejs %>
+                                            <%- include('../snippets/rangedSliderGeneticDistance') %>
                                         </div>
                                         <div class="col">
                                             <div slider class="findMyFriendsFilter">
@@ -361,7 +361,7 @@
 
                                 </div>
                             </div>
-                            <% include ../snippets/resultScripts.ejs %>
+                            <%- include('../snippets/resultScripts') %>
                                 <!-- Scripts for downloading the sample information     -->
-                                <% include ../snippets/saveCsvScript.ejs %>
+                                <%- include('../snippets/saveCsvScript') %>
         </div>

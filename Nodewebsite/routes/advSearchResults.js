@@ -100,8 +100,16 @@ router.get('/', async function(req, res) {
         }
     });
 
-    const all_samples =
-        metadata_samples && samples ? metadata_samples.concat(samples) : metadata_samples ? metadata_samples : samples;
+    // all samples is the intersection of the metadata and search results
+    let all_samples = null;
+    if (metadata_samples && samples) {
+        all_samples = metadata_samples.filter((r) => samples.find((s) => s.sample_id === r.sample_id));
+    } else if (metadata_samples) {
+        all_samples = metadata_samples;
+    } else if (samples) {
+        all_samples = samples;
+    }
+
 
     const number = all_samples?.length || 0;
 

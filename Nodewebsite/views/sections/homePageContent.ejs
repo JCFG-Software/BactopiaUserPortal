@@ -11,11 +11,11 @@
 
 		<% if (userLoggedIn) { %>
 		
-		    <% include ../snippets/homePageLoggedIn %>
+		    <%- include('../snippets/homePageLoggedIn') %>
 
 		<% } else { %>
 		
-			<% include ../snippets/homePageNotLoggedIn %>
+			<%- include('../snippets/homePageNotLoggedIn') %>
 			
 		<% } %>
 
